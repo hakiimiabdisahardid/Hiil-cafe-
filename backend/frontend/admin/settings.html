@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Settings — HIIL CAFE Admin</title>
+<link rel="stylesheet" href="../assets/css/style.css">
+<link rel="stylesheet" href="../assets/css/premium-effects.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <a href="../index.html" class="brand"><span class="brand-mark" aria-label="HIIL logo">H</span> HIIL ADMIN</a>
+    <div class="side-group">Management</div>
+    <a href="dashboard.html" class="side-link"><i class="fa-solid fa-gauge"></i> Overview</a>
+    <a href="tables.html" class="side-link"><i class="fa-solid fa-chair"></i> Tables</a>
+    <a href="inventory.htSml" class="side-link"><i class="fa-solid fa-boxes-stacked"></i> Inventory</a>
+    <a href="customers.html" class="side-link"><i class="fa-solid fa-users"></i> Customers</a>
+    <div class="side-group">Operations</div>
+    <a href="kitchen.html" class="side-link"><i class="fa-solid fa-kitchen-set"></i> Kitchen</a>
+    <a href="employees.html" class="side-link"><i class="fa-solid fa-people-group"></i> Staff</a>
+    <div class="side-group">Business</div>
+    <a href="discounts.html" class="side-link"><i class="fa-solid fa-tag"></i> Promotions</a>
+    <a href="reports.html" class="side-link"><i class="fa-solid fa-chart-line"></i> Reports</a>
+    <a href="settings.html" class="side-link active"><i class="fa-solid fa-gear"></i> Settings</a>
+    <div class="side-group">Account</div>
+    <a href="login.html" class="side-link"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+  </aside>
+
+  <main class="main-panel">
+    <h2 class="display-md" style="margin-bottom:30px">System Settings</h2>
+
+    <!-- RESTAURANT INFORMATION -->
+    <div class="panel glass-card reveal-stagger-1">
+      <h3 style="margin-bottom:20px"><i class="fa-solid fa-info-circle"></i> Restaurant Information</h3>
+      <div class="form-grid">
+        <div class="field"><label>Restaurant Name</label><input type="text" value="HIIL CAFE"></div>
+        <div class="field"><label>Phone</label><input type="tel" value="+252 63 888 3301"></div>
+        <div class="field"><label>Email</label><input type="email" value="hiilcafe@gmail.com"></div>
+        <div class="field"><label>Location</label><input type="text" value="Airport Road, Hargeisa, Somaliland"></div>
+        <div class="field"><label>Website</label><input type="url" placeholder="https://..."></div>
+        <div class="field"><label>Operating Hours</label><input type="text" value="06:00 - 00:00 Daily"></div>
+      </div>
+      <button class="btn btn-gold" style="margin-top:16px"><i class="fa-solid fa-save"></i> Save Changes</button>
+    </div>
+
+    <!-- BUSINESS SETTINGS -->
+    <div class="panel glass-card reveal-stagger-2" style="margin-top:24px">
+      <h3 style="margin-bottom:20px"><i class="fa-solid fa-cog"></i> Business Settings</h3>
+      <div class="form-grid">
+        <div class="field"><label>Currency</label><select>
+          <option selected>USD ($)</option>
+          <option>EUR (€)</option>
+          <option>GBP (£)</option>
+          <option>SOS (Sh)</option>
+        </select></div>
+        <div class="field"><label>Tax Rate (%)</label><input type="number" value="5" min="0" max="100" step="0.1"></div>
+        <div class="field"><label>Service Charge (%)</label><input type="number" value="10" min="0" max="100" step="0.1"></div>
+        <div class="field"><label>Discount Limit (%)</label><input type="number" value="50" min="0" max="100"></div>
+      </div>
+      <button class="btn btn-gold" style="margin-top:16px"><i class="fa-solid fa-save"></i> Save Changes</button>
+    </div>
+
+    <!-- NOTIFICATION SETTINGS -->
+    <div class="panel glass-card reveal-stagger-3" style="margin-top:24px">
+      <h3 style="margin-bottom:20px"><i class="fa-solid fa-bell"></i> Notifications</h3>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer">
+          <input type="checkbox" checked style="width:18px;height:18px;cursor:pointer">
+          <span>Email notifications for new orders</span>
+        </label>
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer">
+          <input type="checkbox" checked style="width:18px;height:18px;cursor:pointer">
+          <span>SMS alerts for urgent items</span>
+        </label>
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer">
+          <input type="checkbox" checked style="width:18px;height:18px;cursor:pointer">
+          <span>Low stock alerts</span>
+        </label>
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer">
+          <input type="checkbox" style="width:18px;height:18px;cursor:pointer">
+          <span>Daily summary emails</span>
+        </label>
+      </div>
+      <button class="btn btn-gold" style="margin-top:16px"><i class="fa-solid fa-save"></i> Save Preferences</button>
+    </div>
+
+    <!-- THEME & APPEARANCE -->
+    <div class="panel glass-card reveal-stagger-4" style="margin-top:24px">
+      <h3 style="margin-bottom:20px"><i class="fa-solid fa-palette"></i> Appearance</h3>
+      <div style="display:flex;gap:20px;align-items:center">
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer">
+          <input type="radio" name="theme" value="dark" checked style="width:18px;height:18px;cursor:pointer">
+          <span>Dark Theme</span>
+        </label>
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer">
+          <input type="radio" name="theme" value="light" style="width:18px;height:18px;cursor:pointer">
+          <span>Light Theme</span>
+        </label>
+      </div>
+      <div style="margin-top:16px">
+        <label>Accent Color</label>
+        <div style="display:flex;gap:10px;margin-top:8px">
+          <input type="color" value="#c9a227" style="width:50px;height:40px;border-radius:var(--radius-sm);cursor:pointer">
+          <span style="color:var(--muted);font-size:.85rem;align-self:center">Default: Gold</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- BACKUP & SECURITY -->
+    <div class="panel glass-card reveal-stagger-1" style="margin-top:24px">
+      <h3 style="margin-bottom:20px"><i class="fa-solid fa-lock"></i> Backup & Security</h3>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="background:rgba(95,168,118,.1);padding:12px;border-radius:var(--radius-sm);border-left:3px solid var(--success)">
+          <p style="margin:0;font-size:.9rem"><strong>Last Backup:</strong> Today at 02:30 AM</p>
+        </div>
+        <button class="btn btn-outline-gold" onclick="backupNow()"><i class="fa-solid fa-download"></i> Backup Now</button>
+        <button class="btn btn-ghost" onclick="scheduleBackup()"><i class="fa-solid fa-calendar"></i> Schedule Backups</button>
+        <button class="btn btn-ghost" onclick="restoreBackup()"><i class="fa-solid fa-rotate-left"></i> Restore from Backup</button>
+      </div>
+    </div>
+
+    <!-- INTEGRATIONS -->
+    <div class="panel glass-card reveal-stagger-2" style="margin-top:24px">
+      <h3 style="margin-bottom:20px"><i class="fa-solid fa-plug"></i> Integrations</h3>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--bg-raised);border-radius:var(--radius-sm);border:1px solid var(--glass-border)">
+          <div>
+            <h4 style="margin:0;font-size:.95rem">WhatsApp Business</h4>
+            <p style="color:var(--muted);font-size:.8rem;margin:4px 0">Send order confirmations via WhatsApp</p>
+          </div>
+          <span class="status-chip" style="background:rgba(95,168,118,.18);color:var(--success)">Connected</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--bg-raised);border-radius:var(--radius-sm);border:1px solid var(--glass-border)">
+          <div>
+            <h4 style="margin:0;font-size:.95rem">Google Analytics</h4>
+            <p style="color:var(--muted);font-size:.8rem;margin:4px 0">Track website traffic and customer behavior</p>
+          </div>
+          <button class="btn btn-ghost btn-sm">Connect</button>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--bg-raised);border-radius:var(--radius-sm);border:1px solid var(--glass-border)">
+          <div>
+            <h4 style="margin:0;font-size:.95rem">Payment Gateway</h4>
+            <p style="color:var(--muted);font-size:.8rem;margin:4px 0">Accept online payments</p>
+          </div>
+          <button class="btn btn-ghost btn-sm">Configure</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SYSTEM INFO -->
+    <div class="panel glass-card reveal-stagger-3" style="margin-top:24px">
+      <h3 style="margin-bottom:16px"><i class="fa-solid fa-circle-info"></i> System Information</h3>
+      <table style="width:100%">
+        <tbody>
+          <tr style="border-bottom:1px solid var(--glass-border)">
+            <td style="padding:10px 0;color:var(--muted)">System Version</td>
+            <td style="padding:10px 0;font-weight:700">1.0.0 Premium</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--glass-border)">
+            <td style="padding:10px 0;color:var(--muted)">Database</td>
+            <td style="padding:10px 0;font-weight:700">MySQL 5.7+</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--glass-border)">
+            <td style="padding:10px 0;color:var(--muted)">API Version</td>
+            <td style="padding:10px 0;font-weight:700">2.1 (REST)</td>
+          </tr>
+          <tr>
+            <td style="padding:10px 0;color:var(--muted)">Last Updated</td>
+            <td style="padding:10px 0;font-weight:700">January 17, 2026</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<div id="toast-wrap"></div>
+<script src="../assets/js/data.js"></script>
+<script>
+function backupNow() {
+  toast('Creating backup... Please wait');
+  setTimeout(() => toast('Backup completed successfully'), 2000);
+}
+
+function scheduleBackups() {
+  toast('Backup schedule configured');
+}
+
+function restoreBackup() {
+  if (confirm('Are you sure? This will restore the system to a previous state.')) {
+    toast('Restoring backup...');
+    setTimeout(() => toast('Restore completed'), 1500);
+  }
+}
+
+document.querySelectorAll('.panel button.btn-gold').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    if (!e.target.closest('button')?.textContent.includes('Backup')) {
+      toast('Settings saved successfully');
+    }
+  });
+});
+</script>
+</body>
+</html>

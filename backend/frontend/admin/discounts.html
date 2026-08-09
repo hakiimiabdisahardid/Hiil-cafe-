@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Promotions & Discounts — HIIL CAFE Admin</title>
+<link rel="stylesheet" href="../assets/css/style.css">
+<link rel="stylesheet" href="../assets/css/premium-effects.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <a href="../index.html" class="brand"><span class="brand-mark" aria-label="HIIL logo">H</span> HIIL ADMIN</a>
+    <div class="side-group">Management</div>
+    <a href="dashboard.html" class="side-link"><i class="fa-solid fa-gauge"></i> Overview</a>
+    <a href="tables.html" class="side-link"><i class="fa-solid fa-chair"></i> Tables</a>
+    <a href="inventory.html" class="side-link"><i class="fa-solid fa-boxes-stacked"></i> Inventory</a>
+    <a href="customers.html" class="side-link"><i class="fa-solid fa-users"></i> Customers</a>
+    <div class="side-group">Operations</div>
+    <a href="kitchen.html" class="side-link"><i class="fa-solid fa-kitchen-set"></i> Kitchen</a>
+    <a href="employees.html" class="side-link"><i class="fa-solid fa-people-group"></i> Staff</a>
+    <div class="side-group">Business</div>
+    <a href="discounts.html" class="side-link active"><i class="fa-solid fa-tag"></i> Promotions</a>
+    <a href="reports.html" class="side-link"><i class="fa-solid fa-chart-line"></i> Reports</a>
+    <a href="settings.html" class="side-link"><i class="fa-solid fa-gear"></i> Settings</a>
+    <div class="side-group">Account</div>
+    <a href="login.html" class="side-link"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+  </aside>
+
+  <main class="main-panel">
+    <div class="topbar">
+      <div>
+        <h2 class="display-md" style="margin-bottom:4px">Promotions & Discounts</h2>
+        <p class="desc">Create and manage promotional campaigns and discount codes.</p>
+      </div>
+      <button class="btn btn-gold" id="addPromoBtn"><i class="fa-solid fa-plus"></i> Create Promo</button>
+    </div>
+
+    <!-- PROMO METRICS -->
+    <div class="kpi-grid" style="margin-bottom:30px">
+      <div class="kpi-card glass-card">
+        <div class="top"><i class="fa-solid fa-tag"></i> Active Promos</div>
+        <b id="activePromos">6</b>
+        <div class="delta">Running now</div>
+      </div>
+      <div class="kpi-card glass-card">
+        <div class="top"><i class="fa-solid fa-percent"></i> Coupons Used</div>
+        <b>234</b>
+        <div class="delta">This month</div>
+      </div>
+      <div class="kpi-card glass-card">
+        <div class="top"><i class="fa-solid fa-money-bill"></i> Discount Total</div>
+        <b>$4,280</b>
+        <div class="delta">Revenue impact</div>
+      </div>
+      <div class="kpi-card glass-card">
+        <div class="top"><i class="fa-solid fa-users"></i> Customers Saved</div>
+        <b>189</b>
+        <div class="delta">Used discounts</div>
+      </div>
+    </div>
+
+    <!-- ACTIVE PROMOTIONS -->
+    <div class="panel glass-card">
+      <div class="panel-head">
+        <h3>Active Promotions</h3>
+        <select id="statusFilter" style="padding:8px 12px;border-radius:var(--radius-sm);border:1px solid var(--glass-border);background:var(--bg-raised);color:var(--cream)">
+          <option value="">All Status</option>
+          <option value="Active">Active</option>
+          <option value="Upcoming">Upcoming</option>
+          <option value="Expired">Expired</option>
+        </select>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Promotion Name</th>
+            <th>Code</th>
+            <th>Discount</th>
+            <th>Valid From</th>
+            <th>Valid Until</th>
+            <th>Uses</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="promosTable">
+          <tr><td colspan="8" style="text-align:center;color:var(--muted)">Loading promotions...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- PRESET PROMOTIONS -->
+    <div class="panel glass-card" style="margin-top:30px">
+      <h3 style="margin-bottom:16px">Quick Promotions</h3>
+      <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr))">
+        <div class="glass-card" style="padding:20px;border-radius:var(--radius-md);text-align:center;cursor:pointer;transition:all .3s" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+          <div style="font-size:2rem;margin-bottom:8px"><i class="fa-solid fa-percent"></i></div>
+          <h4>Weekend Special</h4>
+          <p style="color:var(--muted);font-size:.85rem;margin:8px 0">20% off on Saturdays</p>
+          <button class="btn btn-gold btn-sm btn-block" onclick="activatePromo('weekend')">Activate</button>
+        </div>
+        <div class="glass-card" style="padding:20px;border-radius:var(--radius-md);text-align:center;cursor:pointer;transition:all .3s" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+          <div style="font-size:2rem;margin-bottom:8px"><i class="fa-solid fa-moon"></i></div>
+          <h4>Happy Hour</h4>
+          <p style="color:var(--muted);font-size:.85rem;margin:8px 0">Buy 1 Get 1 (5-7pm)</p>
+          <button class="btn btn-gold btn-sm btn-block" onclick="activatePromo('happyhour')">Activate</button>
+        </div>
+        <div class="glass-card" style="padding:20px;border-radius:var(--radius-md);text-align:center;cursor:pointer;transition:all .3s" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+          <div style="font-size:2rem;margin-bottom:8px"><i class="fa-solid fa-heart"></i></div>
+          <h4>Loyalty Reward</h4>
+          <p style="color:var(--muted);font-size:.85rem;margin:8px 0">VIP members 15% off</p>
+          <button class="btn btn-gold btn-sm btn-block" onclick="activatePromo('loyalty')">Activate</button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- PROMO MODAL -->
+<div id="promoModal" class="cart-overlay" style="display:none;z-index:2000"></div>
+<div id="promoFormModal" class="glass-card" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2001;width:92%;max-width:500px;padding:32px;max-height:90vh;overflow-y:auto">
+  <h3 style="margin-bottom:20px">Create Promotion</h3>
+  <div class="form-grid" style="grid-template-columns:1fr">
+    <div class="field"><label>Promotion Name</label><input type="text" id="promoName" placeholder="e.g., Summer Sale"></div>
+    <div class="field"><label>Coupon Code</label><input type="text" id="promoCode" placeholder="e.g., SUMMER20"></div>
+    <div class="field"><label>Discount Type</label><select id="discountType" onchange="updateDiscountDisplay()">
+      <option value="percentage">Percentage (%)</option>
+      <option value="fixed">Fixed Amount ($)</option>
+    </select></div>
+    <div class="field"><label>Discount Value</label><input type="number" id="discountValue" min="0" step="0.1"></div>
+    <div class="field"><label>Usage Limit</label><input type="number" id="usageLimit" min="0" placeholder="0 for unlimited"></div>
+    <div class="field"><label>Valid From</label><input type="date" id="validFrom"></div>
+    <div class="field"><label>Valid Until</label><input type="date" id="validUntil"></div>
+    <div class="field"><label>Description</label><textarea id="promoDesc" rows="2" placeholder="Promotion details..."></textarea></div>
+  </div>
+  <div style="display:flex;gap:10px;margin-top:20px">
+    <button class="btn btn-gold btn-block" id="savePromoBtn">Create Promotion</button>
+    <button class="btn btn-ghost btn-block" id="closePromoModal">Cancel</button>
+  </div>
+</div>
+
+<div id="toast-wrap"></div>
+<script src="../assets/js/data.js"></script>
+<script>
+const db = HIIL.load();
+
+// Generate sample promos
+function generateSamplePromos() {
+  return [
+    { id: 1, name: 'Summer Feast', code: 'SUMMER20', type: 'percentage', value: 20, validFrom: '2026-01-15', validUntil: '2026-02-15', uses: 42, status: 'Active' },
+    { id: 2, name: 'New Customer', code: 'NEW15', type: 'percentage', value: 15, validFrom: '2026-01-01', validUntil: '2026-12-31', uses: 156, status: 'Active' },
+    { id: 3, name: 'Weekend Special', code: 'WEEKEND10', type: 'percentage', value: 10, validFrom: '2026-01-16', validUntil: '2026-01-19', uses: 28, status: 'Active' },
+    { id: 4, name: 'Happy Hour', code: 'HAPPY5', type: 'fixed', value: 5, validFrom: '2026-01-17', validUntil: '2026-01-17', uses: 8, status: 'Active' },
+    { id: 5, name: 'VIP Exclusive', code: 'VIP25', type: 'percentage', value: 25, validFrom: '2026-01-20', validUntil: '2026-02-20', uses: 12, status: 'Upcoming' },
+    { id: 6, name: 'January Sale', code: 'JAN30', type: 'percentage', value: 30, validFrom: '2025-12-25', validUntil: '2026-01-31', uses: 215, status: 'Expired' },
+  ];
+}
+
+db.promotions = db.promotions || generateSamplePromos();
+
+function renderPromos() {
+  const table = document.getElementById('promosTable');
+  const promos = db.promotions;
+  
+  table.innerHTML = promos.map(p => `
+    <tr class="reveal-stagger-${Math.random() < 0.5 ? 1 : 2}">
+      <td>${p.name}</td>
+      <td><code style="background:rgba(201,162,39,.1);padding:4px 8px;border-radius:4px">${p.code}</code></td>
+      <td>${p.value}${p.type === 'percentage' ? '%' : '$'}</td>
+      <td>${new Date(p.validFrom).toLocaleDateString()}</td>
+      <td>${new Date(p.validUntil).toLocaleDateString()}</td>
+      <td><strong>${p.uses}</strong></td>
+      <td><span class="status-chip" style="display:inline-block" class="status-${p.status.toLowerCase()}">${p.status}</span></td>
+      <td><button class="btn btn-ghost btn-sm"><i class="fa-solid fa-edit"></i></button></td>
+    </tr>
+  `).join('');
+  
+  document.getElementById('activePromos').textContent = promos.filter(p => p.status === 'Active').length;
+}
+
+function activatePromo(type) {
+  toast('Promotion activated: ' + type);
+  renderPromos();
+}
+
+document.getElementById('savePromoBtn').addEventListener('click', () => {
+  const name = document.getElementById('promoName').value;
+  const code = document.getElementById('promoCode').value;
+  
+  if (!name || !code) {
+    toast('Please fill in required fields', 'err');
+    return;
+  }
+  
+  const promo = {
+    id: db.promotions.length + 1,
+    name,
+    code,
+    type: document.getElementById('discountType').value,
+    value: parseFloat(document.getElementById('discountValue').value),
+    validFrom: document.getElementById('validFrom').value,
+    validUntil: document.getElementById('validUntil').value,
+    uses: 0,
+    status: 'Active'
+  };
+  
+  db.promotions.push(promo);
+  HIIL.save(db);
+  renderPromos();
+  closePromoModal();
+  toast('Promotion created successfully');
+});
+
+document.getElementById('closePromoModal').addEventListener('click', closePromoModal);
+function closePromoModal() {
+  document.getElementById('promoModal').style.display = 'none';
+  document.getElementById('promoFormModal').style.display = 'none';
+}
+
+document.getElementById('addPromoBtn').addEventListener('click', () => {
+  document.getElementById('promoModal').style.display = 'block';
+  document.getElementById('promoFormModal').style.display = 'block';
+});
+
+function updateDiscountDisplay() {
+  const type = document.getElementById('discountType').value;
+  const label = document.querySelector('[for="discountValue"]');
+  if (type === 'percentage') {
+    label.textContent = 'Discount (%)';
+  } else {
+    label.textContent = 'Discount ($)';
+  }
+}
+
+renderPromos();
+</script>
+</body>
+</html>

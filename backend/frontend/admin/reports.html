@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reports & Analytics — HIIL CAFE Admin</title>
+<link rel="stylesheet" href="../assets/css/style.css">
+<link rel="stylesheet" href="../assets/css/premium-effects.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <a href="../index.html" class="brand"><span class="brand-mark" aria-label="HIIL logo">H</span> HIIL ADMIN</a>
+    <div class="side-group">Management</div>
+    <a href="dashboard.html" class="side-link"><i class="fa-solid fa-gauge"></i> Overview</a>
+    <a href="tables.html" class="side-link"><i class="fa-solid fa-chair"></i> Tables</a>
+    <a href="inventory.html" class="side-link"><i class="fa-solid fa-boxes-stacked"></i> Inventory</a>
+    <a href="customers.html" class="side-link"><i class="fa-solid fa-users"></i> Customers</a>
+    <div class="side-group">Operations</div>
+    <a href="kitchen.html" class="side-link"><i class="fa-solid fa-kitchen-set"></i> Kitchen</a>
+    <a href="employees.html" class="side-link"><i class="fa-solid fa-people-group"></i> Staff</a>
+    <div class="side-group">Business</div>
+    <a href="discounts.html" class="side-link"><i class="fa-solid fa-tag"></i> Promotions</a>
+    <a href="reports.html" class="side-link active"><i class="fa-solid fa-chart-line"></i> Reports</a>
+    <a href="settings.html" class="side-link"><i class="fa-solid fa-gear"></i> Settings</a>
+    <div class="side-group">Account</div>
+    <a href="login.html" class="side-link"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+  </aside>
+
+  <main class="main-panel">
+    <div class="topbar">
+      <div>
+        <h2 class="display-md" style="margin-bottom:4px">Reports & Analytics</h2>
+        <p class="desc">Comprehensive business insights and financial reports.</p>
+      </div>
+      <button class="btn btn-outline-gold" onclick="exportReport()"><i class="fa-solid fa-download"></i> Export Report</button>
+    </div>
+
+    <!-- FINANCIAL OVERVIEW -->
+    <div class="kpi-grid" style="margin-bottom:30px">
+      <div class="kpi-card glass-card">
+        <div class="top"><i class="fa-solid fa-money-bill"></i> Today Revenue</div>
+        <b>$2,450</b>
+        <div class="delta up"><i class="fa-solid fa-arrow-up"></i> +12% vs yesterday</div>
+      </div>
+      <div class="kpi-card glass-card">
+        <div class="top"><i class="fa-solid fa-chart-line"></i> Month Revenue</div>
+        <b>$68,900</b>
+        <div class="delta up"><i class="fa-solid fa-arrow-up"></i> +8% vs last month</div>
+      </div>
+      <div class="kpi-card glass-card">
+        <div class="top"><i class="fa-solid fa-utensils"></i> Orders Today</div>
+        <b>124</b>
+        <div class="delta">Average: $19.76</div>
+      </div>
+      <div class="kpi-card glass-card">
+        <div class="top"><i class="fa-solid fa-person"></i> Avg Customers</div>
+        <b>68</b>
+        <div class="delta">Tables filled: 82%</div>
+      </div>
+    </div>
+
+    <!-- CHARTS ROW -->
+    <div class="grid grid-2" style="gap:20px;margin-bottom:30px">
+      <div class="panel glass-card reveal-stagger-1">
+        <h3 style="margin-bottom:20px">Revenue Trend (Last 7 Days)</h3>
+        <canvas id="revenueChart" height="100"></canvas>
+      </div>
+      <div class="panel glass-card reveal-stagger-2">
+        <h3 style="margin-bottom:20px">Sales by Category</h3>
+        <canvas id="categoryChart" height="100"></canvas>
+      </div>
+    </div>
+
+    <!-- BEST SELLERS -->
+    <div class="grid grid-2" style="gap:20px;margin-bottom:30px">
+      <div class="panel glass-card">
+        <h3 style="margin-bottom:16px">Top Selling Items</h3>
+        <table style="font-size:.9rem">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Sold</th>
+              <th>Revenue</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Saffron Latte</td><td>156</td><td>$1,560</td></tr>
+            <tr><td>Grilled Lamb</td><td>89</td><td>$1,780</td></tr>
+            <tr><td>Fresh Juice</td><td>124</td><td>$620</td></tr>
+            <tr><td>Seafood Platter</td><td>52</td><td>$1,040</td></tr>
+            <tr><td>Dessert Sampler</td><td>78</td><td>$780</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="panel glass-card">
+        <h3 style="margin-bottom:16px">Hourly Sales</h3>
+        <table style="font-size:.9rem">
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Orders</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>08:00 - 10:00</td><td>12</td><td>$240</td></tr>
+            <tr><td>10:00 - 12:00</td><td>18</td><td>$380</td></tr>
+            <tr><td>12:00 - 14:00</td><td>34</td><td>$890</td></tr>
+            <tr><td>14:00 - 16:00</td><td>15</td><td>$420</td></tr>
+            <tr><td>18:00 - 20:00</td><td>45</td><td>$1,520</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- DETAILED METRICS -->
+    <div class="panel glass-card">
+      <h3 style="margin-bottom:20px">Monthly Breakdown</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Month</th>
+            <th>Total Orders</th>
+            <th>Total Revenue</th>
+            <th>Avg Order Value</th>
+            <th>Growth</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>January 2026</td>
+            <td>3,240</td>
+            <td>$68,900</td>
+            <td>$21.27</td>
+            <td><span class="delta up" style="display:inline-block"><i class="fa-solid fa-arrow-up"></i> 8%</span></td>
+            <td><button class="btn btn-ghost btn-sm"><i class="fa-solid fa-eye"></i> View</button></td>
+          </tr>
+          <tr>
+            <td>December 2025</td>
+            <td>3,100</td>
+            <td>$63,800</td>
+            <td>$20.58</td>
+            <td><span class="delta up" style="display:inline-block"><i class="fa-solid fa-arrow-up"></i> 15%</span></td>
+            <td><button class="btn btn-ghost btn-sm"><i class="fa-solid fa-eye"></i> View</button></td>
+          </tr>
+          <tr>
+            <td>November 2025</td>
+            <td>2,900</td>
+            <td>$55,400</td>
+            <td>$19.10</td>
+            <td><span class="delta down" style="display:inline-block"><i class="fa-solid fa-arrow-down"></i> -3%</span></td>
+            <td><button class="btn btn-ghost btn-sm"><i class="fa-solid fa-eye"></i> View</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<div id="toast-wrap"></div>
+<script src="../assets/js/data.js"></script>
+<script>
+// Revenue Trend Chart
+const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+new Chart(revenueCtx, {
+  type: 'line',
+  data: {
+    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    datasets: [{
+      label: 'Revenue ($)',
+      data: [1800, 2100, 1950, 2300, 2150, 3200, 2450],
+      borderColor: 'var(--gold-bright)',
+      backgroundColor: 'rgba(230, 198, 92, 0.1)',
+      borderWidth: 2,
+      fill: true,
+      tension: 0.4,
+      pointBackgroundColor: 'var(--gold-bright)',
+      pointBorderColor: '#fff',
+      pointRadius: 5
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: { color: 'var(--muted)' },
+        grid: { color: 'rgba(255,255,255,0.05)' }
+      },
+      x: {
+        ticks: { color: 'var(--muted)' },
+        grid: { display: false }
+      }
+    }
+  }
+});
+
+// Sales by Category Chart
+const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+new Chart(categoryCtx, {
+  type: 'doughnut',
+  data: {
+    labels: ['Coffee', 'Main Course', 'Drinks', 'Desserts', 'Other'],
+    datasets: [{
+      data: [25, 35, 15, 15, 10],
+      backgroundColor: [
+        'var(--gold-bright)',
+        'var(--burgundy-bright)',
+        'var(--gold)',
+        'rgba(95,168,118,0.8)',
+        'rgba(255,255,255,0.2)'
+      ],
+      borderColor: 'var(--bg-raised)',
+      borderWidth: 2
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: { color: 'var(--muted)', padding: 15 }
+      }
+    }
+  }
+});
+
+function exportReport() {
+  toast('Report exported as PDF');
+}
+</script>
+</body>
+</html>

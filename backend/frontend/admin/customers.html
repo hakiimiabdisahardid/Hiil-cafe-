@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Customer Management — HIIL CAFE Admin</title>
+<link rel="stylesheet" href="../assets/css/style.css">
+<link rel="stylesheet" href="../assets/css/premium-effects.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <a href="../index.html" class="brand"><span class="brand-mark" aria-label="HIIL logo">H</span> HIIL ADMIN</a>
+    <div class="side-group">Management</div>
+    <a href="dashboard.html" class="side-link"><i class="fa-solid fa-gauge"></i> Overview</a>
+    <a href="tables.html" class="side-link"><i class="fa-solid fa-chair"></i> Tables</a>
+    <a href="inventory.html" class="side-link"><i class="fa-solid fa-boxes-stacked"></i> Inventory</a>
+    <a href="customers.html" class="side-link active"><i class="fa-solid fa-users"></i> Customers</a>
+    <div class="side-group">Operations</div>
+    <a href="kitchen.html" class="side-link"><i class="fa-solid fa-kitchen-set"></i> Kitchen</a>
+    <a href="employees.html" class="side-link"><i class="fa-solid fa-people-group"></i> Staff</a>
+    <div class="side-group">Business</div>
+    <a href="discounts.html" class="side-link"><i class="fa-solid fa-tag"></i> Promotions</a>
+    <a href="reports.html" class="side-link"><i class="fa-solid fa-chart-line"></i> Reports</a>
+    <a href="settings.html" class="side-link"><i class="fa-solid fa-gear"></i> Settings</a>
+    <div class="side-group">Account</div>
+    <a href="login.html" class="side-link"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+  </aside>
+
+  <main class="main-panel">
+    <div class="topbar">
+      <div>
+        <h2 class="display-md" style="margin-bottom:4px">Customer Management</h2>
+        <p class="desc">View customer profiles, loyalty points, and visit history.</p>
+      </div>
+      <button class="btn btn-gold" id="addCustomerBtn"><i class="fa-solid fa-plus"></i> Add Customer</button>
+    </div>
+
+    <!-- CUSTOMER METRICS -->
+    <div class="kpi-grid" style="margin-bottom:30px">
+      <div class="kpi-card glass-card">
+        <div class="top"><i class="fa-solid fa-users"></i> Total Customers</div>
+        <b id="totalCustomers">156</b>
+        <div class="delta">All time</div>
+      </div>
+      <div class="kpi-card glass-card">
+        <div class="top"><i class="fa-solid fa-star"></i> VIP Members</div>
+        <b id="vipCount">23</b>
+        <div class="delta">Premium tier</div>
+      </div>
+      <div class="kpi-card glass-card">
+        <div class="top"><i class="fa-solid fa-fire"></i> Active This Month</div>
+        <b id="activeMonth">42</b>
+        <div class="delta">Regular visitors</div>
+      </div>
+      <div class="kpi-card glass-card">
+        <div class="top"><i class="fa-solid fa-crown"></i> Loyalty Points</div>
+        <b id="totalPoints">12,450</b>
+        <div class="delta">Distributed</div>
+      </div>
+    </div>
+
+    <!-- CUSTOMERS LIST -->
+    <div class="panel glass-card">
+      <div class="panel-head">
+        <h3>Customers</h3>
+        <input type="text" id="customerSearch" placeholder="Search by name or phone..." style="width:240px;padding:8px 12px;border-radius:var(--radius-sm);border:1px solid var(--glass-border);background:var(--bg-raised);color:var(--cream);">
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Total Visits</th>
+            <th>Loyalty Points</th>
+            <th>Tier</th>
+            <th>Last Visit</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="customersTable">
+          <tr><td colspan="8" style="text-align:center;color:var(--muted)">Loading customers...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- LOYALTY REWARDS -->
+    <div class="panel glass-card" style="margin-top:30px">
+      <h3 style="margin-bottom:16px">Available Rewards</h3>
+      <div class="grid grid-3" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr))">
+        <div class="glass-card" style="padding:20px;text-align:center;border-radius:var(--radius-md)">
+          <div style="font-size:2rem;margin-bottom:8px"><i class="fa-solid fa-coffee"></i></div>
+          <h4>Free Coffee</h4>
+          <p style="color:var(--gold);font-weight:700;margin:8px 0">500 Points</p>
+          <button class="btn btn-gold btn-sm btn-block">Redeem</button>
+        </div>
+        <div class="glass-card" style="padding:20px;text-align:center;border-radius:var(--radius-md)">
+          <div style="font-size:2rem;margin-bottom:8px"><i class="fa-solid fa-percent"></i></div>
+          <h4>20% Discount</h4>
+          <p style="color:var(--gold);font-weight:700;margin:8px 0">1000 Points</p>
+          <button class="btn btn-gold btn-sm btn-block">Redeem</button>
+        </div>
+        <div class="glass-card" style="padding:20px;text-align:center;border-radius:var(--radius-md)">
+          <div style="font-size:2rem;margin-bottom:8px"><i class="fa-solid fa-crown"></i></div>
+          <h4>VIP Status</h4>
+          <p style="color:var(--gold);font-weight:700;margin:8px 0">2500 Points</p>
+          <button class="btn btn-gold btn-sm btn-block">Redeem</button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- CUSTOMER DETAILS MODAL -->
+<div id="customerModal" class="cart-overlay" style="display:none;z-index:2000"></div>
+<div id="customerFormModal" class="glass-card" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2001;width:92%;max-width:500px;padding:32px;max-height:90vh;overflow-y:auto">
+  <h3 style="margin-bottom:20px">Customer Profile</h3>
+  <div class="form-grid">
+    <div class="field"><label>Full Name</label><input type="text" id="custName"></div>
+    <div class="field"><label>Phone</label><input type="tel" id="custPhone"></div>
+    <div class="field"><label>Email</label><input type="email" id="custEmail"></div>
+    <div class="field"><label>Join Date</label><input type="date" id="custJoinDate"></div>
+  </div>
+  <div style="background:rgba(201,162,39,.1);padding:16px;border-radius:var(--radius-sm);margin:16px 0">
+    <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+      <span>Loyalty Points:</span>
+      <strong id="custPointsDisplay">0</strong>
+    </div>
+    <input type="range" id="custPoints" min="0" max="5000" style="width:100%;margin:8px 0">
+  </div>
+  <div style="display:flex;gap:10px;margin-top:20px">
+    <button class="btn btn-gold btn-block" id="saveCustomerBtn">Save</button>
+    <button class="btn btn-ghost btn-block" id="closeCustomerModal">Cancel</button>
+  </div>
+</div>
+
+<div id="toast-wrap"></div>
+<script src="../assets/js/data.js"></script>
+<script>
+const db = HIIL.load();
+
+// Generate sample customers
+function generateSampleCustomers() {
+  const names = ['Ahmed Hassan', 'Fatima Mohamed', 'Ibrahim Ali', 'Aisha Ismail', 'Hassan Ahmed', 'Maryam Khan', 'Omar Ibrahim', 'Layla Hassan'];
+  return names.map((name, i) => ({
+    id: i + 1,
+    name,
+    phone: '+252' + (630000000 + i).toString().slice(-8),
+    email: name.toLowerCase().replace(' ', '.') + '@email.com',
+    visits: Math.floor(Math.random() * 30) + 1,
+    points: Math.floor(Math.random() * 3000),
+    tier: ['Bronze', 'Silver', 'Gold', 'Platinum'][Math.floor(Math.random() * 4)],
+    lastVisit: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000).toLocaleDateString()
+  }));
+}
+
+db.customers = db.customers || generateSampleCustomers();
+
+function renderCustomers() {
+  const table = document.getElementById('customersTable');
+  const customers = db.customers;
+  
+  table.innerHTML = customers.map(c => `
+    <tr class="reveal-stagger-${Math.random() < 0.5 ? 1 : 2}">
+      <td>${c.name}</td>
+      <td>${c.phone}</td>
+      <td>${c.email}</td>
+      <td><strong>${c.visits}</strong></td>
+      <td><span style="color:var(--gold);font-weight:700">${c.points}</span></td>
+      <td><span class="eyebrow" style="font-size:.7rem;margin:0">${c.tier}</span></td>
+      <td>${c.lastVisit}</td>
+      <td><button class="btn btn-ghost btn-sm" onclick="editCustomer(${c.id})"><i class="fa-solid fa-eye"></i></button></td>
+    </tr>
+  `).join('');
+  
+  updateStats();
+}
+
+function updateStats() {
+  const customers = db.customers;
+  document.getElementById('totalCustomers').textContent = customers.length;
+  document.getElementById('vipCount').textContent = customers.filter(c => c.tier === 'Platinum').length;
+  document.getElementById('activeMonth').textContent = Math.floor(customers.length * 0.3);
+  document.getElementById('totalPoints').textContent = customers.reduce((sum, c) => sum + c.points, 0).toLocaleString();
+}
+
+function editCustomer(id) {
+  const customer = db.customers.find(c => c.id === id);
+  if (customer) {
+    document.getElementById('custName').value = customer.name;
+    document.getElementById('custPhone').value = customer.phone;
+    document.getElementById('custEmail').value = customer.email;
+    document.getElementById('custPoints').value = customer.points;
+    document.getElementById('custPointsDisplay').textContent = customer.points;
+  }
+  document.getElementById('customerModal').style.display = 'block';
+  document.getElementById('customerFormModal').style.display = 'block';
+}
+
+document.getElementById('custPoints').addEventListener('input', (e) => {
+  document.getElementById('custPointsDisplay').textContent = e.target.value;
+});
+
+document.getElementById('saveCustomerBtn').addEventListener('click', () => {
+  toast('Customer profile updated');
+  closeCustomerModal();
+});
+
+document.getElementById('closeCustomerModal').addEventListener('click', closeCustomerModal);
+function closeCustomerModal() {
+  document.getElementById('customerModal').style.display = 'none';
+  document.getElementById('customerFormModal').style.display = 'none';
+}
+
+document.getElementById('customerSearch').addEventListener('input', (e) => {
+  const query = e.target.value.toLowerCase();
+  const rows = document.querySelectorAll('#customersTable tr');
+  rows.forEach(row => {
+    const text = row.textContent.toLowerCase();
+    row.style.display = text.includes(query) ? '' : 'none';
+  });
+});
+
+renderCustomers();
+</script>
+</body>
+</html>

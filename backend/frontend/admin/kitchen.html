@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kitchen Dashboard — HIIL CAFE</title>
+<link rel="stylesheet" href="../assets/css/style.css">
+<link rel="stylesheet" href="../assets/css/premium-effects.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+<div class="app-shell">
+  <main class="main-panel" style="width:100%">
+    <div class="topbar">
+      <div>
+        <div class="brand" style="margin-bottom:8px"><span class="brand-mark" aria-label="HIIL CAFE logo">H</span></div>
+        <p class="desc">Live orders update automatically — move tickets forward as you cook.</p>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center">
+        <span class="badge badge-popular"><i class="fa-solid fa-circle" style="font-size:.5rem"></i> Live</span>
+        <a href="dashboard.html" class="btn btn-ghost btn-sm"><i class="fa-solid fa-gauge"></i> Admin</a>
+        <a href="login.html" class="btn btn-ghost btn-sm"><i class="fa-solid fa-right-from-bracket"></i></a>
+      </div>
+    </div>
+
+    <div class="kanban" id="kanban"></div>
+  </main>
+</div>
+
+<div id="toast-wrap"></div>
+<script src="../assets/js/data.js"></script>
+<script>
+const cols = [
+  { key:'New', next:'Preparing', label:'New Orders', action:'Start Preparing' },
+  { key:'Preparing', next:'Ready', label:'Preparing', action:'Mark Ready' },
+  { key:'Ready', next:'Served', label:'Ready to Serve', action:'Mark Served' },
+  { key:'Served', next:null, label:'Served', action:null },
+  { key:'Cancelled', next:null, label:'Cancelled', action:null },
+];
+
+function render(){
+  const db = HIIL.load();
+  document.getElementById('kanban').innerHTML = cols.map(c=>{
+    const orders = db.orders.filter(o=>o.status===c.key).sort((a,b)=>b.createdAt-a.createdAt);
+    return `<div class="kanban-col">
+      <h4>${c.label} <span>${orders.length}</span></h4>
+      ${orders.map(o=>`
+        <div class="order-ticket">
+          <div class="t-head"><span>${o.no}</span><span>Table ${o.table}</span></div>
+          <ul>${o.items.map(i=>`<li><span>${i.qty}× ${i.name}</span></li>`).join('')}</ul>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span class="timer-badge"><i class="fa-regular fa-clock"></i> ${timeAgo(o.createdAt)}</span>
+            <span class="price">${fmtMoney(o.total)}</span>
+          </div>
+          ${c.action? `<button class="btn btn-gold btn-sm btn-block" style="margin-top:10px" data-next="${o.id}" data-to="${c.next}">${c.action}</button>`:''}
+          ${c.key==='New'? `<button class="btn btn-ghost btn-sm btn-block" style="margin-top:8px" data-next="${o.id}" data-to="Cancelled">Cancel</button>`:''}
+        </div>`).join('') || '<p class="desc" style="opacity:.6">No orders</p>'}
+    </div>`;
+  }).join('');
+  document.querySelectorAll('[data-next]').forEach(b=> b.addEventListener('click', ()=>{
+    const liveDb = HIIL.load();
+    const o = liveDb.orders.find(x=>x.id===b.dataset.next);
+    o.status = b.dataset.to; HIIL.save(liveDb);
+    toast(o.no + ' → ' + o.status); render();
+  }));
+}
+render();
+setInterval(render, 4000);
+window.addEventListener('storage', render);
+</script>
+</body>
+</html>

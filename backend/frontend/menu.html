@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Menu — HIIL CAFE</title>
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/premium-effects.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+  .menu-shell{ border:1px solid rgba(255,255,255,.08); background:rgba(255,255,255,.03); backdrop-filter:blur(16px); border-radius:24px; padding:8px; }
+  .menu-shell .grid{ gap:16px; }
+</style>
+</head>
+<body>
+
+<nav class="site-nav scrolled">
+  <div class="container">
+    <a href="index.html" class="brand"><span class="brand-mark" aria-label="HIIL CAFE logo">H</span></a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="menu.html" class="active">Menu</a>
+      <a href="reserve.html">Reserve</a>
+      <a href="index.html#experience">Experience</a>
+      <a href="index.html#contact">Contact</a>
+    </div>
+    <div class="nav-actions">
+      <button class="btn btn-ghost btn-sm theme-toggle-btn" data-theme-toggle><i class="fa-solid fa-sun"></i> Light</button>
+      <a href="admin/login.html" class="btn btn-ghost btn-sm"><i class="fa-solid fa-lock"></i> Staff</a>
+    </div>
+  </div>
+</nav>
+
+<header class="page-hero">
+  <div class="hero-bg" style="--hero-image-url: url('https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1600&q=80');">
+    <div class="hero-grain"></div>
+  </div>
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="brand-mark" aria-label="HIIL logo">H</span>
+        <span class="eyebrow" style="margin:0">Signature Dining</span>
+      </div>
+      <div class="eyebrow">Digital Menu</div>
+      <h1 class="display-hero" style="margin-top:12px">Everything we serve</h1>
+      <p class="lead" style="margin-top:12px;max-width:760px">Search, filter, and build your order. Every dish is crafted for comfort, flavor, and a polished experience from the first sip to the last bite.</p>
+      <div class="hero-actions">
+        <a href="reserve.html" class="btn btn-gold">Reserve a Table <i class="fa-solid fa-crown"></i></a>
+        <a href="index.html#contact" class="btn btn-ghost">Visit us today</a>
+      </div>
+      <div class="hero-chip-row">
+        <span class="hero-chip"><i class="fa-solid fa-fire"></i> Freshly prepared</span>
+        <span class="hero-chip"><i class="fa-solid fa-mug-hot"></i> Coffee & bites</span>
+        <span class="hero-chip"><i class="fa-solid fa-crown"></i> VIP favorites</span>
+      </div>
+
+      <div style="display:flex;gap:16px;margin-top:32px;flex-wrap:wrap;align-items:center">
+        <div class="field" style="flex:1;min-width:240px">
+          <input type="text" id="searchInput" placeholder="Search dishes, e.g. 'latte' or 'pizza'...">
+        </div>
+      </div>
+      <div class="pill-tabs" id="catTabs" style="margin-top:20px"></div>
+    </div>
+  </div>
+</header>
+
+<section style="padding-top:0">
+  <div class="container">
+    <div class="menu-shell">
+      <div class="grid grid-4" id="menuGrid"></div>
+    </div>
+    <div class="empty-state" id="emptyState" style="display:none">
+      <div class="icon"><i class="fa-solid fa-utensils"></i></div>
+      <p>No dishes match your search. Try another keyword or category.</p>
+    </div>
+  </div>
+</section>
+
+<!-- cart drawer -->
+<div class="cart-overlay" id="cartOverlay"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-head">
+    <h3>Your Order</h3>
+    <button id="closeCart" style="font-size:1.2rem"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-foot">
+    <div class="row"><span>Subtotal</span><span id="cartSubtotal">$0.00</span></div>
+    <div class="row"><span>Tax (5%)</span><span id="cartTax">$0.00</span></div>
+    <div class="row total"><span>Total</span><span id="cartTotal">$0.00</span></div>
+    <a href="order.html" class="btn btn-gold btn-block" style="margin-top:16px">Proceed to Order <i class="fa-solid fa-arrow-right"></i></a>
+  </div>
+</div>
+<button class="fab-cart" id="fabCart"><i class="fa-solid fa-bag-shopping"></i><span class="count" id="cartCount">0</span></button>
+
+<footer style="margin-top:40px">
+  <div class="container foot-bottom" style="border:0;margin:0;padding:24px 0">
+    <span>© 2026 HIIL CAFE</span>
+    <span>Airport Road, Hargeisa</span>
+  </div>
+</footer>
+
+<div id="toast-wrap"></div>
+<script src="assets/js/data.js"></script>
+<script>
+initNavScroll();
+initRevealOnScroll();
+initThemeToggle();
+const db = HIIL.load();
+let activeCat = 'All';
+let query = '';
+
+const cats = ['All', ...new Set(db.menu.map(m=>m.cat))];
+document.getElementById('catTabs').innerHTML = cats.map(c=>`<button class="pill ${c==='All'?'active':''}" data-cat="${c}">${c}</button>`).join('');
+
+function render(){
+  const favs = HIIL.getFavs();
+  let items = db.menu.filter(m=>{
+    const matchCat = activeCat==='All' || m.cat===activeCat;
+    const matchQ = m.name.toLowerCase().includes(query.toLowerCase()) || m.desc.toLowerCase().includes(query.toLowerCase());
+    return matchCat && matchQ;
+  });
+  const grid = document.getElementById('menuGrid');
+  document.getElementById('emptyState').style.display = items.length? 'none':'block';
+  grid.innerHTML = items.map(m => `
+    <div class="food-card">
+      <div class="img-wrap">
+        <img src="${m.img}" alt="${m.name}" loading="lazy">
+        <div class="badges">
+          ${m.popular?'<span class="badge badge-popular">Popular</span>':''}
+          ${m.isNew?'<span class="badge badge-new">New</span>':''}
+          ${m.discount?`<span class="badge badge-discount">-${m.discount}%</span>`:''}
+          ${!m.available?'<span class="badge badge-out">Sold Out</span>':''}
+        </div>
+        <button class="fav-btn ${favs.includes(m.id)?'active':''}" data-id="${m.id}"><i class="fa-solid fa-heart"></i></button>
+      </div>
+      <div class="body">
+        <div class="row-top"><h4>${m.name}</h4><span class="price">${fmtMoney(m.discount? m.price*(1-m.discount/100): m.price)}</span></div>
+        <p class="desc">${m.desc}</p>
+        <div class="meta-row">
+          <span class="rating"><i class="fa-solid fa-star"></i> ${m.rating}</span>
+          <span class="eyebrow" style="margin:0">${m.cat}</span>
+        </div>
+        <button class="btn ${m.available?'btn-gold':'btn-ghost'} add-btn" data-id="${m.id}" ${m.available?'':'disabled'}>
+          ${m.available? '<i class=\"fa-solid fa-plus\"></i> Add to Order' : 'Currently Unavailable'}
+        </button>
+      </div>
+    </div>
+  `).join('');
+}
+render();
+
+document.getElementById('catTabs').addEventListener('click', (e)=>{
+  const btn = e.target.closest('.pill'); if(!btn) return;
+  activeCat = btn.dataset.cat;
+  document.querySelectorAll('#catTabs .pill').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+});
+document.getElementById('searchInput').addEventListener('input', (e)=>{ query = e.target.value; render(); });
+
+document.getElementById('menuGrid').addEventListener('click', (e)=>{
+  const fav = e.target.closest('.fav-btn');
+  if(fav){ const f = HIIL.toggleFav(fav.dataset.id); fav.classList.toggle('active', f.includes(fav.dataset.id)); toast(f.includes(fav.dataset.id)?'Added to favorites':'Removed from favorites'); return; }
+  const add = e.target.closest('.add-btn');
+  if(add && !add.disabled){ const item = db.menu.find(m=>m.id===add.dataset.id); HIIL.addToCart(item); toast(item.name + ' added to order'); }
+});
+
+// cart drawer
+function renderCart(){
+  const cart = HIIL.getCart();
+  document.getElementById('cartCount').textContent = cart.reduce((s,c)=>s+c.qty,0);
+  const wrap = document.getElementById('cartItems');
+  if(!cart.length){ wrap.innerHTML = '<div class="empty-state"><div class="icon"><i class="fa-solid fa-bag-shopping"></i></div><p>Your cart is empty.</p></div>'; }
+  else{
+    wrap.innerHTML = cart.map(c=>`
+      <div class="cart-item">
+        <img src="${c.img}" alt="">
+        <div style="flex:1">
+          <div style="display:flex;justify-content:space-between"><strong>${c.name}</strong><span class="price">${fmtMoney(c.price*c.qty)}</span></div>
+          <div class="qty-ctrl">
+            <button data-id="${c.id}" data-d="-1">−</button>
+            <span>${c.qty}</span>
+            <button data-id="${c.id}" data-d="1">+</button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+  const sub = HIIL.cartTotal();
+  const tax = sub * (db.settings.tax/100);
+  document.getElementById('cartSubtotal').textContent = fmtMoney(sub);
+  document.getElementById('cartTax').textContent = fmtMoney(tax);
+  document.getElementById('cartTotal').textContent = fmtMoney(sub+tax);
+}
+renderCart();
+window.addEventListener('hiil-cart-updated', renderCart);
+
+document.getElementById('cartItems').addEventListener('click', (e)=>{
+  const btn = e.target.closest('button[data-d]'); if(!btn) return;
+  const cart = HIIL.getCart();
+  const item = cart.find(c=>c.id===btn.dataset.id);
+  const newQty = item.qty + parseInt(btn.dataset.d);
+  HIIL.updateCartQty(btn.dataset.id, newQty);
+});
+
+const drawer = document.getElementById('cartDrawer'), overlay = document.getElementById('cartOverlay');
+document.getElementById('fabCart').addEventListener('click', ()=>{ drawer.classList.add('open'); overlay.classList.add('open'); });
+document.getElementById('closeCart').addEventListener('click', ()=>{ drawer.classList.remove('open'); overlay.classList.remove('open'); });
+overlay.addEventListener('click', ()=>{ drawer.classList.remove('open'); overlay.classList.remove('open'); });
+</script>
+</body>
+</html>

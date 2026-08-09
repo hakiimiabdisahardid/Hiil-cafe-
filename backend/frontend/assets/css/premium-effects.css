@@ -1,0 +1,500 @@
+/* ============================================================
+   HIIL CAFE — Premium Effects & Animations Enhancement
+   Glassmorphism, micro-interactions, smooth transitions
+   ============================================================ */
+
+/* ENHANCED GLASSMORPHISM EFFECTS */
+.glass-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+  pointer-events: none;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.glass-card:hover::before {
+  opacity: 1;
+}
+
+/* GRADIENT ANIMATIONS */
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.gradient-animated {
+  background-size: 200% 200%;
+  animation: gradientFlow 6s ease infinite;
+}
+
+/* PREMIUM BUTTON EFFECTS */
+.btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.btn:hover::before {
+  left: 100%;
+}
+
+/* CARD ELEVATION & SHADOW EFFECTS */
+.food-card,
+.glass-card {
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  transition: 
+    box-shadow 0.4s ease,
+    transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+    border-color 0.3s ease;
+}
+
+.food-card:hover,
+.glass-card:hover {
+  box-shadow: 
+    0 16px 48px rgba(201, 162, 39, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* SCROLL ANIMATIONS - STAGGERED REVEAL */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+    filter: blur(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.reveal-stagger-1 { animation: slideInUp 0.8s ease 0.1s both; }
+.reveal-stagger-2 { animation: slideInUp 0.8s ease 0.2s both; }
+.reveal-stagger-3 { animation: slideInUp 0.8s ease 0.3s both; }
+.reveal-stagger-4 { animation: slideInUp 0.8s ease 0.4s both; }
+
+/* HERO SECTION ENHANCED */
+.hero {
+  perspective: 1000px;
+}
+
+.hero-content {
+  animation: fadeInScale 1s ease 0.3s both;
+}
+
+/* INFINITE ANIMATIONS */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes glow {
+  0%, 100% {
+    text-shadow: 0 0 10px rgba(230, 198, 92, 0.3);
+    box-shadow: 0 0 20px rgba(230, 198, 92, 0.2);
+  }
+  50% {
+    text-shadow: 0 0 20px rgba(230, 198, 92, 0.6);
+    box-shadow: 0 0 40px rgba(230, 198, 92, 0.4);
+  }
+}
+
+.float { animation: float 3s ease-in-out infinite; }
+.pulse { animation: pulse 2s ease-in-out infinite; }
+.glow { animation: glow 2s ease-in-out infinite; }
+
+/* MENU CARD HOVER EFFECTS */
+.food-card .img-wrap {
+  position: relative;
+  overflow: hidden;
+}
+
+.food-card .img-wrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(201, 162, 39, 0.1), transparent);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.food-card:hover .img-wrap::after {
+  opacity: 1;
+}
+
+/* BADGE ANIMATIONS */
+.badge {
+  animation: slideInUp 0.6s ease 0.2s both;
+}
+
+.badge:nth-child(1) { animation-delay: 0.2s; }
+.badge:nth-child(2) { animation-delay: 0.3s; }
+.badge:nth-child(3) { animation-delay: 0.4s; }
+
+/* ACTIVE STATE ANIMATIONS */
+.fav-btn.active {
+  animation: pulse 0.4s ease;
+}
+
+/* FORM FIELD ENHANCEMENTS */
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  background: linear-gradient(135deg, rgba(201, 162, 39, 0.05), rgba(107, 31, 42, 0.05));
+  box-shadow: 0 0 0 2px rgba(201, 162, 39, 0.2);
+}
+
+/* LOADING SKELETON ANIMATION */
+@keyframes skeleton-loading {
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.05) 25%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0.05) 75%
+  );
+  background-size: 1000px 100%;
+  animation: skeleton-loading 2s infinite;
+  border-radius: var(--radius-sm);
+}
+
+/* PRICE TAG ANIMATION */
+.price {
+  position: relative;
+  display: inline-block;
+}
+
+.food-card:hover .price {
+  animation: slideInUp 0.4s ease;
+}
+
+/* STATUS CHIP ANIMATIONS */
+.status-chip {
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.status-chip::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 100px;
+  background: inherit;
+  filter: blur(8px);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+}
+
+.status-chip:hover::before {
+  opacity: 0.5;
+}
+
+/* TOGGLE ANIMATIONS */
+.theme-toggle-btn {
+  transition: transform 0.3s ease;
+}
+
+.theme-toggle-btn:hover {
+  transform: rotate(20deg);
+}
+
+/* NAV LINK HOVER EFFECTS */
+.nav-links a {
+  position: relative;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--gold);
+  transition: width 0.3s ease;
+}
+
+.nav-links a:not(.active):hover::after {
+  width: 100%;
+}
+
+/* SMOOTH PAGE TRANSITIONS */
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+body {
+  animation: pageEnter 0.6s ease;
+}
+
+/* CART DRAWER SMOOTH ANIMATION */
+.cart-drawer {
+  box-shadow: -16px 0 48px rgba(0, 0, 0, 0.3);
+  transition: 
+    transform 0.45s cubic-bezier(0.165, 0.84, 0.44, 1),
+    box-shadow 0.3s ease;
+}
+
+.cart-drawer.open {
+  box-shadow: -16px 0 64px rgba(201, 162, 39, 0.15);
+}
+
+/* KANBAN CARDS STAGGER */
+.order-ticket {
+  animation: slideInUp 0.5s ease backwards;
+}
+
+.kanban-col:nth-child(1) .order-ticket:nth-child(1) { animation-delay: 0.05s; }
+.kanban-col:nth-child(1) .order-ticket:nth-child(2) { animation-delay: 0.1s; }
+.kanban-col:nth-child(1) .order-ticket:nth-child(3) { animation-delay: 0.15s; }
+.kanban-col:nth-child(2) .order-ticket:nth-child(1) { animation-delay: 0.1s; }
+.kanban-col:nth-child(2) .order-ticket:nth-child(2) { animation-delay: 0.15s; }
+.kanban-col:nth-child(2) .order-ticket:nth-child(3) { animation-delay: 0.2s; }
+
+/* TIMER BADGE ANIMATION */
+.timer-badge {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* TABLE CARD STATUS INDICATION */
+.table-card {
+  transition: all 0.3s ease;
+}
+
+.table-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 
+    0 12px 32px rgba(201, 162, 39, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* RESPONSIVE ANIMATIONS */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* MOBILE OPTIMIZATIONS */
+@media (max-width: 768px) {
+  .food-card:hover {
+    transform: translateY(-4px);
+  }
+
+  .btn::before {
+    display: none;
+  }
+
+  .hero-content {
+    animation: slideInUp 0.6s ease;
+  }
+
+  .reveal {
+    transition-duration: 0.6s;
+  }
+}
+
+/* HOVER STATE FOR DARK THEME */
+body:not(.light-theme) .glass-card:hover {
+  border-color: rgba(201, 162, 39, 0.4);
+}
+
+/* LIGHT THEME ADJUSTMENTS */
+body.light-theme .glass-card {
+  box-shadow: 
+    0 8px 24px rgba(107, 31, 42, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+body.light-theme .glass-card:hover {
+  box-shadow: 
+    0 16px 48px rgba(201, 162, 39, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+/* ACCESSIBILITY - FOCUS STATES */
+.food-card:focus-within {
+  border-color: var(--gold-bright);
+  box-shadow: 0 0 0 3px rgba(230, 198, 92, 0.2);
+}
+
+/* SMOOTH SCROLLBAR */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-alt);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--gold-dim);
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gold-bright);
+}
+
+/* DROPDOWN MENU ANIMATIONS */
+select {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 1.5em 1.5em;
+  padding-right: 2.5rem;
+  appearance: none;
+}
+
+/* SMOOTH COLOR TRANSITION ON THEME TOGGLE */
+body {
+  transition: 
+    background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* TEXT GRADIENT EFFECT */
+@keyframes textGradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.text-gradient {
+  background: linear-gradient(
+    90deg,
+    var(--gold),
+    var(--gold-bright),
+    var(--burgundy-bright),
+    var(--gold)
+  );
+  background-size: 200% auto;
+  animation: textGradient 4s linear infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* PREMIUM SPACING & TYPOGRAPHY */
+.section-head {
+  animation: slideInUp 0.8s ease;
+}
+
+.panel {
+  animation: slideInUp 0.8s ease backwards;
+}
+
+.panel:nth-child(1) { animation-delay: 0.1s; }
+.panel:nth-child(2) { animation-delay: 0.2s; }
+.panel:nth-child(3) { animation-delay: 0.3s; }
+
+/* TOOLTIP ANIMATIONS */
+@keyframes tooltipEnter {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+[data-tooltip] {
+  position: relative;
+  cursor: help;
+}
+
+[data-tooltip]:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-raised);
+  color: var(--gold-bright);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  white-space: nowrap;
+  animation: tooltipEnter 0.3s ease;
+  z-index: 1000;
+  border: 1px solid rgba(201, 162, 39, 0.3);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}

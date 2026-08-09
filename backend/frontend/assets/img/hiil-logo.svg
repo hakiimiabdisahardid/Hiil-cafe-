@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" role="img" aria-label="HIIL CAFE logo">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f2c14e"/>
+      <stop offset="100%" stop-color="#b0702d"/>
+    </linearGradient>
+  </defs>
+  <rect x="24" y="24" width="272" height="272" rx="56" fill="#111111"/>
+  <path d="M102 98h116c36 0 64 28 64 64s-28 64-64 64H102z" fill="url(#g)"/>
+  <path d="M120 116h80c22 0 40 18 40 40s-18 40-40 40h-80z" fill="#fff" opacity="0.94"/>
+  <path d="M146 92c0-16 11-28 28-28 16 0 28 12 28 28" stroke="#f2c14e" stroke-width="12" fill="none" stroke-linecap="round"/>
+  <path d="M138 220c14 14 32 20 56 20 24 0 44-6 60-18" stroke="#b0702d" stroke-width="12" fill="none" stroke-linecap="round"/>
+</svg>

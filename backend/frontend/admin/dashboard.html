@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard — HIIL CAFE</title>
+<link rel="stylesheet" href="../assets/css/style.css">
+<link rel="stylesheet" href="../assets/css/premium-effects.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<style>
+  .welcome-hero {
+    min-height: 220px;
+    padding: 28px;
+    margin-bottom: 24px;
+    border: 1px solid rgba(255,255,255,.16);
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: end;
+  }
+  .welcome-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(0,0,0,.8), rgba(0,0,0,.25));
+    z-index: 0;
+  }
+  .welcome-hero > * {
+    position: relative;
+    z-index: 1;
+  }
+  .welcome-links {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 14px;
+  }
+  .welcome-links a {
+    color: #fff;
+    text-decoration: none;
+  }
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <a href="../index.html" class="brand brand-banner" aria-label="Welcome to HIIL Cafe">
+      <span class="brand-mark" aria-label="HIIL CAFE logo">H</span>
+    </a>
+
+    <div class="side-group">General</div>
+    <a class="side-link active" data-target="overview"><i class="fa-solid fa-gauge"></i> Overview</a>
+    <a class="side-link" data-target="orders"><i class="fa-solid fa-receipt"></i> Orders</a>
+    <a class="side-link" data-target="reservations"><i class="fa-solid fa-calendar-check"></i> Reservations</a>
+    <a class="side-link" data-target="tables"><i class="fa-solid fa-chair"></i> Tables</a>
+
+    <div class="side-group">Catalog</div>
+    <a class="side-link" data-target="menu"><i class="fa-solid fa-utensils"></i> Menu</a>
+    <a class="side-link" data-target="inventory"><i class="fa-solid fa-boxes-stacked"></i> Inventory</a>
+    <a class="side-link" data-target="discounts"><i class="fa-solid fa-tags"></i> Discounts &amp; Loyalty</a>
+
+    <div class="side-group">People</div>
+    <a class="side-link" data-target="customers"><i class="fa-solid fa-users"></i> Customers</a>
+    <a class="side-link" data-target="employees"><i class="fa-solid fa-id-badge"></i> Employees</a>
+
+    <div class="side-group">Insights</div>
+    <a class="side-link" data-target="reports"><i class="fa-solid fa-chart-line"></i> Reports</a>
+    <a class="side-link" data-target="settings"><i class="fa-solid fa-gear"></i> Settings</a>
+
+    <div class="side-group"></div>
+    <a class="side-link" href="kitchen.html" target="_blank"><i class="fa-solid fa-kitchen-set"></i> Kitchen View ↗</a>
+    <a class="side-link" href="../tablet.html" target="_blank"><i class="fa-solid fa-tablet-screen-button"></i> Waiter Tablet ↗</a>
+    <a class="side-link" href="login.html"><i class="fa-solid fa-right-from-bracket"></i> Sign Out</a>
+  </aside>
+
+  <main class="main-panel">
+    <div class="topbar">
+      <div>
+        <h2 class="display-md" id="pageTitle">Overview</h2>
+        <p class="desc" id="pageSub">Welcome back — here's how HIIL CAFE is doing today.</p>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <button class="btn btn-ghost btn-sm theme-toggle-btn" data-theme-toggle><i class="fa-solid fa-sun"></i> Light</button>
+        <button class="btn btn-outline-gold btn-sm" id="backupBtn"><i class="fa-solid fa-download"></i> Backup</button>
+        <label class="btn btn-ghost btn-sm" for="restoreInput"><i class="fa-solid fa-upload"></i> Restore</label>
+        <input id="restoreInput" type="file" accept="application/json" hidden>
+        <span class="badge badge-popular"><i class="fa-solid fa-circle" style="font-size:.5rem"></i> Live Demo Data</span>
+        <button class="btn btn-ghost btn-sm" id="resetBtn"><i class="fa-solid fa-rotate-left"></i> Reset Demo Data</button>
+      </div>
+    </div>
+
+    <section data-section="overview"></section>
+    <section data-section="orders" style="display:none"></section>
+    <section data-section="reservations" style="display:none"></section>
+    <section data-section="tables" style="display:none"></section>
+    <section data-section="menu" style="display:none"></section>
+    <section data-section="inventory" style="display:none"></section>
+    <section data-section="discounts" style="display:none"></section>
+    <section data-section="customers" style="display:none"></section>
+    <section data-section="employees" style="display:none"></section>
+    <section data-section="reports" style="display:none"></section>
+    <section data-section="settings" style="display:none"></section>
+  </main>
+</div>
+
+<div id="toast-wrap"></div>
+<script src="../assets/js/data.js"></script>
+<script>
+let db = HIIL.load();
+const titles = {
+  overview:['Overview',"Welcome back — here's how HIIL CAFE is doing today."],
+  orders:['Orders','All incoming orders from QR ordering and walk-ins.'],
+  reservations:['Reservations','Upcoming and past table bookings.'],
+  tables:['Tables','Live status of every table in the restaurant.'],
+  menu:['Menu Management','Add, edit, and control availability of dishes.'],
+  inventory:['Inventory','Stock levels and low-stock alerts.'],
+  discounts:['Discounts & Loyalty','Manage promotions and the rewards program.'],
+  customers:['Customers','Guest profiles, visit history, and rewards.'],
+  employees:['Employees','Staff roster and shift status.'],
+  reports:['Reports & Analytics','Sales performance at a glance.'],
+  settings:['Settings','Restaurant details and system preferences.'],
+};
+
+function switchTo(tab){
+  document.querySelectorAll('.side-link[data-target]').forEach(l=>l.classList.toggle('active', l.dataset.target===tab));
+  document.querySelectorAll('section[data-section]').forEach(s=> s.style.display = s.dataset.section===tab ? 'block':'none');
+  document.getElementById('pageTitle').textContent = titles[tab][0];
+  document.getElementById('pageSub').textContent = titles[tab][1];
+  render[tab]();
+}
+document.querySelectorAll('.side-link[data-target]').forEach(l=> l.addEventListener('click', ()=>switchTo(l.dataset.target)));
+document.getElementById('resetBtn').addEventListener('click', ()=>{ db = HIIL.reset(); toast('Demo data reset'); switchTo(document.querySelector('.side-link.active').dataset.target); });
+
+const money = (n)=> fmtMoney(n, db.settings.currency==='USD'?'$':db.settings.currency+' ');
+
+async function handleRestore(){
+  const file = document.getElementById('restoreInput').files[0];
+  const ok = await HIIL.importBackup(file);
+  if (ok) {
+    db = HIIL.load();
+    switchTo(document.querySelector('.side-link.active').dataset.target);
+  }
+}
+
+document.getElementById('backupBtn').addEventListener('click', ()=>HIIL.exportBackup());
+document.getElementById('restoreInput').addEventListener('change', handleRestore);
+
+/* ---------------- OVERVIEW ---------------- */
+function renderOverview(){
+  const el = document.querySelector('[data-section="overview"]');
+  const todaySales = db.orders.reduce((s,o)=>s+o.total,0);
+  const completed = db.orders.filter(o=>o.status==='Served').length;
+  const pending = db.orders.filter(o=>['New','Preparing','Ready'].includes(o.status)).length;
+  const cancelled = db.orders.filter(o=>o.status==='Cancelled').length;
+  el.innerHTML = `
+    <div class="glass-card panel welcome-hero" style="background-image:url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFWQ4C_MeeK9Uw3NGebYz2Sm_kX73Vpxr7W_C_oVn12UFw3yhTqJZUsNu6&s=10')">
+      <div>
+        <h2 style="margin:0 0 8px;font-size:1.8rem;color:#fff">Welcome to HIIL CAFE</h2>
+        <p style="margin:0 0 8px;max-width:640px;color:rgba(255,255,255,.9)">Your live dashboard for orders, reservations, and café performance at a glance.</p>
+        <div class="welcome-links">
+          <a href="https://www.tiktok.com/@hiil.cafe.hargeis?is_from_webapp=1&sender_device=pc" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm"><i class="fa-brands fa-tiktok"></i> TikTok</a>
+          <a href="https://www.instagram.com/reel/DXd2p3sgOxk/?utm_source=ig_web_button_share_sheet" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm"><i class="fa-brands fa-instagram"></i> Instagram</a>
+          <a href="https://www.facebook.com/share/r/1DkaHNDLyJ/" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm"><i class="fa-brands fa-facebook"></i> Facebook</a>
+          <a href="tel:+252633338801" class="btn btn-ghost btn-sm"><i class="fa-solid fa-phone"></i> +252 633 338801</a>
+        </div>
+      </div>
+    </div>
+    <div class="kpi-grid">
+      <div class="glass-card kpi-card"><div class="top">Today's Sales <i class="fa-solid fa-sack-dollar"></i></div><b>${money(todaySales)}</b><div class="delta up">▲ live from orders</div></div>
+      <div class="glass-card kpi-card"><div class="top">Orders <i class="fa-solid fa-receipt"></i></div><b>${db.orders.length}</b><div class="delta up">${pending} pending</div></div>
+      <div class="glass-card kpi-card"><div class="top">Reservations <i class="fa-solid fa-calendar-check"></i></div><b>${db.reservations.length}</b><div class="delta up">upcoming bookings</div></div>
+      <div class="glass-card kpi-card"><div class="top">Low Stock Items <i class="fa-solid fa-triangle-exclamation"></i></div><b>${db.inventory.filter(i=>i.qty<=i.min).length}</b><div class="delta down">needs reorder</div></div>
+    </div>
+    <div class="grid" style="grid-template-columns:1fr 1fr; margin-bottom:24px">
+      <div class="glass-card panel"><div class="panel-head"><h3>Revenue Snapshot</h3></div><div class="desc">Gross today: ${money(todaySales)} · Avg order: ${money(todaySales / Math.max(1, db.orders.length))}</div><div class="desc" style="margin-top:8px">Completed: ${completed} · Cancelled: ${cancelled}</div></div>
+      <div class="glass-card panel"><div class="panel-head"><h3>VIP Focus</h3></div><div class="desc">${db.reservations.filter(r=>r.area.includes('VIP')).length} VIP reservations and ${db.customers.filter(c=>c.status.includes('VIP')).length} loyalty guests on record.</div></div>
+    </div>
+    <div class="grid" style="grid-template-columns:1.4fr 1fr">
+      <div class="glass-card panel">
+        <div class="panel-head"><h3>Weekly Sales Trend</h3></div>
+        <div class="chart-placeholder"><canvas id="salesChart" height="130"></canvas></div>
+      </div>
+      <div class="glass-card panel">
+        <div class="panel-head"><h3>Order Status</h3></div>
+        <div class="chart-placeholder"><canvas id="statusChart" height="130"></canvas></div>
+      </div>
+    </div>
+    <div class="glass-card panel">
+      <div class="panel-head"><h3>Recent Orders</h3><button class="btn btn-outline-gold btn-sm" onclick="switchTo('orders')">View all</button></div>
+      <table><thead><tr><th>Order</th><th>Table</th><th>Items</th><th>Total</th><th>Status</th></tr></thead>
+      <tbody>${(db.orders.slice(0,5).map(o=>`<tr><td>${o.no}</td><td>Table ${o.table}</td><td>${o.items.length}</td><td>${money(o.total)}</td><td><span class="status-chip status-${o.status.toLowerCase()}">${o.status}</span></td></tr>`).join('')) || '<tr><td colspan="5" style="color:var(--muted)">No orders yet — place one from the QR order page.</td></tr>'}</tbody></table>
+    </div>`;
+  const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  new Chart(document.getElementById('salesChart'), { type:'bar', data:{ labels:days, datasets:[{ label:'Sales', data:[420,510,380,610,700,890,todaySales||520], backgroundColor:'#c9a227', borderRadius:6 }]},
+    options:{ plugins:{legend:{display:false}}, scales:{ x:{ grid:{display:false}, ticks:{color:'#a79f8f'} }, y:{ grid:{color:'rgba(255,255,255,.06)'}, ticks:{color:'#a79f8f'} } } } });
+  new Chart(document.getElementById('statusChart'), { type:'doughnut', data:{ labels:['New','Preparing','Ready','Served','Cancelled'],
+    datasets:[{ data:['New','Preparing','Ready','Served','Cancelled'].map(s=>db.orders.filter(o=>o.status===s).length || 1), backgroundColor:['#d99a3d','#c9a227','#5fa876','#6f6a61','#c0503f'] }]},
+    options:{ plugins:{legend:{position:'bottom', labels:{color:'#a79f8f', boxWidth:10}}} } });
+}
+
+/* ---------------- ORDERS ---------------- */
+function renderOrders(){
+  const el = document.querySelector('[data-section="orders"]');
+  el.innerHTML = `<div class="glass-card panel">
+    <div class="panel-head"><h3>All Orders (${db.orders.length})</h3></div>
+    <table><thead><tr><th>Order #</th><th>Table</th><th>Items</th><th>Total</th><th>Placed</th><th>Status</th></tr></thead>
+    <tbody>${db.orders.map(o=>`
+      <tr>
+        <td>${o.no}</td><td>Table ${o.table}</td>
+        <td>${o.items.map(i=>i.qty+'× '+i.name).join(', ')}</td>
+        <td>${money(o.total)}</td><td>${timeAgo(o.createdAt)}</td>
+        <td><select class="statusSelect" data-id="${o.id}">
+          ${['New','Preparing','Ready','Served','Cancelled'].map(s=>`<option value="${s}" ${o.status===s?'selected':''}>${s}</option>`).join('')}
+        </select></td>
+      </tr>`).join('') || '<tr><td colspan="6" style="color:var(--muted)">No orders yet.</td></tr>'}
+    </tbody></table>
+  </div>`;
+  el.querySelectorAll('.statusSelect').forEach(s=> s.addEventListener('change', ()=>{
+    const o = db.orders.find(x=>x.id===s.dataset.id); o.status = s.value; HIIL.save(db); toast('Order '+o.no+' → '+o.status); renderOverview();
+  }));
+}
+
+/* ---------------- RESERVATIONS ---------------- */
+function renderReservations(){
+  const el = document.querySelector('[data-section="reservations"]');
+  el.innerHTML = `<div class="glass-card panel">
+    <div class="panel-head"><h3>Reservations (${db.reservations.length})</h3></div>
+    <table><thead><tr><th>Guest</th><th>Phone</th><th>Date</th><th>Time</th><th>Guests</th><th>Area</th><th>Status</th><th></th></tr></thead>
+    <tbody>${db.reservations.map(r=>`
+      <tr><td>${r.name}</td><td>${r.phone}</td><td>${r.date}</td><td>${r.time}</td><td>${r.guests}</td><td>${r.area}</td>
+      <td><span class="status-chip status-${r.status==='confirmed'?'available':'cancelled'}">${r.status}</span></td>
+      <td><button class="btn btn-sm btn-ghost" data-cancel="${r.id}">Cancel</button></td></tr>`).join('') || '<tr><td colspan="8" style="color:var(--muted)">No reservations yet.</td></tr>'}
+    </tbody></table>
+  </div>`;
+  el.querySelectorAll('[data-cancel]').forEach(b=>b.addEventListener('click', ()=>{
+    const r = db.reservations.find(x=>x.id===b.dataset.cancel); r.status='cancelled'; HIIL.save(db); toast('Reservation cancelled'); renderReservations();
+  }));
+}
+
+/* ---------------- TABLES ---------------- */
+function renderTables(){
+  const el = document.querySelector('[data-section="tables"]');
+  el.innerHTML = `<div class="grid grid-4" id="tableGrid"></div>`;
+  const cycle = { available:'occupied', occupied:'cleaning', cleaning:'reserved', reserved:'available' };
+  document.getElementById('tableGrid').innerHTML = db.tables.map(t=>`
+    <div class="glass-card table-card">
+      <div class="num">#${t.number}</div>
+      <span class="status-chip status-${t.status}">${t.status}</span>
+      <div class="info">${t.area}${t.guests?` · ${t.guests} guests`:''}</div>
+      <button class="btn btn-outline-gold btn-sm btn-block" style="margin-top:14px" data-cycle="${t.id}">Change Status</button>
+      <a href="../order.html?table=${t.number}" target="_blank" class="btn btn-ghost btn-sm btn-block" style="margin-top:8px">View QR Menu</a>
+    </div>`).join('');
+  document.querySelectorAll('[data-cycle]').forEach(b=>b.addEventListener('click', ()=>{
+    const t = db.tables.find(x=>x.id===b.dataset.cycle); t.status = cycle[t.status]; HIIL.save(db); toast('Table '+t.number+' → '+t.status); renderTables();
+  }));
+}
+
+/* ---------------- MENU ---------------- */
+function renderMenu(){
+  const el = document.querySelector('[data-section="menu"]');
+  el.innerHTML = `
+    <div class="glass-card panel">
+      <div class="panel-head"><h3>Add New Dish</h3></div>
+      <form id="addDishForm" class="form-grid">
+        <div class="field"><label>Name</label><input required name="name" placeholder="Dish name"></div>
+        <div class="field"><label>Category</label><input required name="cat" placeholder="e.g. Pizza"></div>
+        <div class="field"><label>Price</label><input required type="number" step="0.1" name="price" placeholder="9.5"></div>
+        <div class="field"><label>Image URL</label><input name="img" placeholder="https://..."></div>
+        <div class="field" style="grid-column:1/-1"><label>Description</label><input name="desc" placeholder="Short description"></div>
+        <button class="btn btn-gold" style="grid-column:1/-1" type="submit"><i class="fa-solid fa-plus"></i> Add Dish</button>
+      </form>
+    </div>
+    <div class="glass-card panel">
+      <div class="panel-head"><h3>All Dishes (${db.menu.length})</h3></div>
+      <table><thead><tr><th>Name</th><th>Category</th><th>Price</th><th>Rating</th><th>Available</th><th></th></tr></thead>
+      <tbody>${db.menu.map(m=>`
+        <tr><td>${m.name}</td><td>${m.cat}</td><td>${money(m.price)}</td><td>${m.rating}</td>
+        <td><span class="status-chip status-${m.available?'available':'cancelled'}">${m.available?'Available':'Sold Out'}</span></td>
+        <td><button class="btn btn-sm btn-ghost" data-toggle="${m.id}">Toggle</button> <button class="btn btn-sm btn-ghost" data-del="${m.id}"><i class="fa-solid fa-trash"></i></button></td></tr>`).join('')}
+      </tbody></table>
+    </div>`;
+  el.querySelector('#addDishForm').addEventListener('submit', (e)=>{
+    e.preventDefault(); const fd = new FormData(e.target);
+    db.menu.unshift({ id:'m_'+Date.now(), name:fd.get('name'), cat:fd.get('cat'), price:parseFloat(fd.get('price')),
+      img: fd.get('img')||'https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=800',
+      desc: fd.get('desc')||'', popular:false, isNew:true, discount:0, available:true, rating:4.5 });
+    HIIL.save(db); toast('Dish added'); renderMenu();
+  });
+  el.querySelectorAll('[data-toggle]').forEach(b=>b.addEventListener('click', ()=>{
+    const m = db.menu.find(x=>x.id===b.dataset.toggle); m.available=!m.available; HIIL.save(db); renderMenu();
+  }));
+  el.querySelectorAll('[data-del]').forEach(b=>b.addEventListener('click', ()=>{
+    db.menu = db.menu.filter(x=>x.id!==b.dataset.del); HIIL.save(db); toast('Dish removed'); renderMenu();
+  }));
+}
+
+/* ---------------- INVENTORY ---------------- */
+function renderInventory(){
+  const el = document.querySelector('[data-section="inventory"]');
+  el.innerHTML = `<div class="glass-card panel">
+    <div class="panel-head"><h3>Stock Levels</h3></div>
+    <table><thead><tr><th>Ingredient</th><th>Qty</th><th>Min</th><th>Supplier</th><th>Status</th></tr></thead>
+    <tbody>${db.inventory.map(i=>`<tr><td>${i.name}</td><td>${i.qty} ${i.unit}</td><td>${i.min} ${i.unit}</td><td>${i.supplier}</td>
+      <td>${i.qty===0?'<span class="status-chip status-cancelled">Out of Stock</span>': i.qty<=i.min?'<span class="status-chip status-reserved">Low Stock</span>':'<span class="status-chip status-available">Good</span>'}</td></tr>`).join('')}
+    </tbody></table>
+  </div>`;
+}
+
+/* ---------------- DISCOUNTS / LOYALTY ---------------- */
+function renderDiscounts(){
+  const el = document.querySelector('[data-section="discounts"]');
+  el.innerHTML = `
+  <div class="glass-card panel">
+    <div class="panel-head"><h3>Active Promotions</h3></div>
+    <table><thead><tr><th>Name</th><th>Type</th><th>Value</th><th>Status</th><th></th></tr></thead>
+    <tbody>${db.discounts.map(d=>`<tr><td>${d.name}</td><td>${d.type}</td><td>${d.value}%</td>
+      <td><span class="status-chip status-${d.active?'available':'cancelled'}">${d.active?'Active':'Inactive'}</span></td>
+      <td><button class="btn btn-sm btn-ghost" data-tog="${d.id}">Toggle</button></td></tr>`).join('')}
+    </tbody></table>
+  </div>
+  <div class="glass-card panel">
+    <div class="panel-head"><h3>Loyalty Program</h3></div>
+    <p class="desc">Guests earn 1 point per $1 spent. Redemption tiers:</p>
+    <div class="grid grid-3" style="margin-top:16px">
+      <div class="glass-card" style="padding:18px"><b class="price">Free Coffee</b><p class="desc">150 points</p></div>
+      <div class="glass-card" style="padding:18px"><b class="price">10% Discount Coupon</b><p class="desc">400 points</p></div>
+      <div class="glass-card" style="padding:18px"><b class="price">VIP Membership</b><p class="desc">800 points</p></div>
+    </div>
+  </div>`;
+  el.querySelectorAll('[data-tog]').forEach(b=>b.addEventListener('click', ()=>{
+    const d = db.discounts.find(x=>x.id===b.dataset.tog); d.active=!d.active; HIIL.save(db); renderDiscounts();
+  }));
+}
+
+/* ---------------- CUSTOMERS ---------------- */
+function renderCustomers(){
+  const el = document.querySelector('[data-section="customers"]');
+  el.innerHTML = `<div class="glass-card panel">
+    <div class="panel-head"><h3>Customers (${db.customers.length})</h3></div>
+    <table><thead><tr><th>Name</th><th>Phone</th><th>Visits</th><th>Points</th><th>Favorite</th><th>Status</th></tr></thead>
+    <tbody>${db.customers.map(c=>`<tr><td>${c.name}</td><td>${c.phone}</td><td>${c.visits}</td><td>${c.points}</td><td>${c.favorite}</td><td>${c.status}</td></tr>`).join('')}</tbody></table>
+  </div>`;
+}
+
+/* ---------------- EMPLOYEES ---------------- */
+function renderEmployees(){
+  const el = document.querySelector('[data-section="employees"]');
+  el.innerHTML = `<div class="glass-card panel">
+    <div class="panel-head"><h3>Staff Roster</h3></div>
+    <table><thead><tr><th>Name</th><th>Role</th><th>Phone</th><th>Status</th><th></th></tr></thead>
+    <tbody>${db.employees.map(e=>`<tr><td>${e.name}</td><td>${e.role}</td><td>${e.phone}</td>
+      <td><span class="status-chip status-${e.status==='On Shift'?'available':'cancelled'}">${e.status}</span></td>
+      <td><button class="btn btn-sm btn-ghost" data-shift="${e.id}">Toggle Shift</button></td></tr>`).join('')}</tbody></table>
+  </div>`;
+  el.querySelectorAll('[data-shift]').forEach(b=>b.addEventListener('click', ()=>{
+    const em = db.employees.find(x=>x.id===b.dataset.shift); em.status = em.status==='On Shift'?'Off':'On Shift'; HIIL.save(db); renderEmployees();
+  }));
+}
+
+/* ---------------- REPORTS ---------------- */
+function renderReports(){
+  const el = document.querySelector('[data-section="reports"]');
+  el.innerHTML = `
+  <div class="topbar" style="margin-bottom:20px">
+    <div></div>
+    <button class="btn btn-outline-gold btn-sm" id="exportCsv"><i class="fa-solid fa-file-csv"></i> Export Orders CSV</button>
+  </div>
+  <div class="glass-card panel"><div class="panel-head"><h3>Most Sold Dishes</h3></div><canvas id="topDishesChart" height="110"></canvas></div>
+  <div class="glass-card panel"><div class="panel-head"><h3>Monthly Comparison</h3></div><canvas id="monthChart" height="110"></canvas></div>`;
+  const counts = {};
+  db.orders.forEach(o=>o.items.forEach(i=>{ counts[i.name]=(counts[i.name]||0)+i.qty; }));
+  const labels = Object.keys(counts).length? Object.keys(counts): db.menu.slice(0,5).map(m=>m.name);
+  const data = Object.keys(counts).length? Object.values(counts): [12,9,7,6,4];
+  new Chart(document.getElementById('topDishesChart'), { type:'bar', data:{ labels, datasets:[{ data, backgroundColor:'#c9a227', borderRadius:6 }] },
+    options:{ indexAxis:'y', plugins:{legend:{display:false}}, scales:{ x:{ grid:{color:'rgba(255,255,255,.06)'}, ticks:{color:'#a79f8f'} }, y:{ grid:{display:false}, ticks:{color:'#a79f8f'} } } } });
+  new Chart(document.getElementById('monthChart'), { type:'line', data:{ labels:['Jan','Feb','Mar','Apr','May','Jun','Jul'],
+    datasets:[{ label:'Revenue', data:[3200,3600,3100,4200,4600,5100,4800], borderColor:'#c9a227', backgroundColor:'rgba(201,162,39,.15)', fill:true, tension:.4 }]},
+    options:{ plugins:{legend:{labels:{color:'#a79f8f'}}}, scales:{ x:{ grid:{display:false}, ticks:{color:'#a79f8f'} }, y:{ grid:{color:'rgba(255,255,255,.06)'}, ticks:{color:'#a79f8f'} } } } });
+  document.getElementById('exportCsv').addEventListener('click', ()=>{
+    let csv = 'Order No,Table,Items,Total,Status\n';
+    db.orders.forEach(o=> csv += `${o.no},${o.table},"${o.items.map(i=>i.qty+'x '+i.name).join('; ')}",${o.total.toFixed(2)},${o.status}\n`);
+    const blob = new Blob([csv], {type:'text/csv'});
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'hiil_orders.csv'; a.click();
+    toast('CSV exported');
+  });
+}
+
+/* ---------------- SETTINGS ---------------- */
+function renderSettings(){
+  const el = document.querySelector('[data-section="settings"]');
+  const s = db.settings;
+  el.innerHTML = `<div class="glass-card panel">
+    <form id="settingsForm" class="form-grid">
+      <div class="field"><label>Restaurant Name</label><input name="name" value="${s.name}"></div>
+      <div class="field"><label>Currency</label><input name="currency" value="${s.currency}"></div>
+      <div class="field"><label>Tax (%)</label><input name="tax" type="number" value="${s.tax}"></div>
+      <div class="field"><label>Working Hours</label><input name="hours" value="${s.hours||''}"></div>
+   <div class="field"><label>Phone</label><input name="phone" value="${s.phone||''}"></div>
+      <div class="field"><label>Email</label><input name="email" value="${s.email||''}"></div>
+      <div class="field" style="grid-column:1/-1"><label>Address</label><input name="address" value="${s.address||''}"></div>
+
+      <div class="field"><label>Facebook</label><input name="facebook" placeholder="https://facebook.com/..." value="${s.facebook||''}"></div>
+      <div class="field"><label>Instagram</label><input name="instagram" placeholder="https://www.instagram.com/reel/DXd2p3sgOxk/?utm_source=ig_web_button_share_sheet" value="${s.instagram||''}"></div>
+      <div class="field"><label>WhatsApp</label><input name="whatsapp" placeholder="+252633338801" value="${s.whatsapp||''}"></div>
+      <div class="field"><label>TikTok</label><input name="tiktok" placeholder="https://www.tiktok.com/@hiil.cafe.hargeis?is_from_webapp=1&sender_device=pc" value="${s.tiktok||''}"></div>
+
+      <button class="btn btn-gold" style="grid-column:1/-1" type="submit">Save Settings</button>
+    </form>
+  </div>`;
+  el.querySelector('#settingsForm').addEventListener('submit', (e)=>{
+    e.preventDefault(); 
+    const fd = new FormData(e.target);
+    Object.assign(db.settings, { 
+      name: fd.get('name'), 
+      currency: fd.get('currency'), 
+      tax: parseFloat(fd.get('tax')), 
+      hours: fd.get('6:00-00:00'), 
+      phone: fd.get('638883301'), 
+      email: fd.get('hiilcafehargeisa@gmail.com'), 
+      address: fd.get('https://maps.google.com/maps?vet=10CAAQoqAOahcKEwiQiL7XgvqVAxUAAAAAHQAAAAAQDA..i&pvq=Cg0vZy8xMXBsd3l4Zm43&fvr=1&cs=1&um=1&ie=UTF-8&fb=1&gl=so&sa=X&ftid=0x1628bfc95ed33357:0x59be89d19e29f13b'),
+      facebook: fd.get('https://www.facebook.com/share/r/1D2WBnQPVJ/'),
+      instagram: fd.get('https://www.instagram.com/hiilcafe/'),
+      whatsapp: fd.get('https://wa.me/633338801'),
+      tiktok: fd.get('https://www.tiktok.com/@hiilcafe')
+    });
+    HIIL.save(db); 
+    toast('Settings saved');
+  });
+}
+
+const render = { overview:renderOverview, orders:renderOrders, reservations:renderReservations, tables:renderTables, menu:renderMenu, inventory:renderInventory, discounts:renderDiscounts, customers:renderCustomers, employees:renderEmployees, reports:renderReports, settings:renderSettings };
+renderOverview();
+</script>
+</body>
+</html>

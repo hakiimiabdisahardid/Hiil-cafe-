@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Staff Management — HIIL CAFE Admin</title>
+<link rel="stylesheet" href="../assets/css/style.css">
+<link rel="stylesheet" href="../assets/css/premium-effects.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <a href="../index.html" class="brand"><span class="brand-mark" aria-label="HIIL logo">H</span> HIIL ADMIN</a>
+    <div class="side-group">Management</div>
+    <a href="dashboard.html" class="side-link"><i class="fa-solid fa-gauge"></i> Overview</a>
+    <a href="tables.html" class="side-link"><i class="fa-solid fa-chair"></i> Tables</a>
+    <a href="inventory.html" class="side-link"><i class="fa-solid fa-boxes-stacked"></i> Inventory</a>
+    <a href="customers.html" class="side-link"><i class="fa-solid fa-users"></i> Customers</a>
+    <div class="side-group">Operations</div>
+    <a href="kitchen.html" class="side-link"><i class="fa-solid fa-kitchen-set"></i> Kitchen</a>
+    <a href="employees.html" class="side-link active"><i class="fa-solid fa-people-group"></i> Staff</a>
+    <div class="side-group">Business</div>
+    <a href="discounts.html" class="side-link"><i class="fa-solid fa-tag"></i> Promotions</a>
+    <a href="reports.html" class="side-link"><i class="fa-solid fa-chart-line"></i> Reports</a>
+    <a href="settings.html" class="side-link"><i class="fa-solid fa-gear"></i> Settings</a>
+    <div class="side-group">Account</div>
+    <a href="login.html" class="side-link"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+  </aside>
+
+  <main class="main-panel">
+    <div class="topbar">
+      <div>
+        <h2 class="display-md" style="margin-bottom:4px">Staff Management</h2>
+        <p class="desc">Manage employee information, attendance, and performance.</p>
+      </div>
+      <button class="btn btn-gold" id="addEmpBtn"><i class="fa-solid fa-plus"></i> Hire Staff</button>
+    </div>
+
+    <!-- STAFF METRICS -->
+    <div class="kpi-grid" style="margin-bottom:30px">
+      <div class="kpi-card glass-card">
+        <div class="top"><i class="fa-solid fa-users"></i> Total Staff</div>
+        <b id="totalStaff">18</b>
+        <div class="delta">Employees</div>
+      </div>
+      <div class="kpi-card glass-card">
+        <div class="top"><i class="fa-solid fa-check"></i> Present Today</div>
+        <b id="presentCount">16</b>
+        <div class="delta">89% attendance</div>
+      </div>
+      <div class="kpi-card glass-card">
+        <div class="top"><i class="fa-solid fa-person-running"></i> On Leave</div>
+        <b id="leaveCount">2</b>
+        <div class="delta">Scheduled</div>
+      </div>
+      <div class="kpi-card glass-card">
+        <div class="top"><i class="fa-solid fa-star"></i> Top Performer</div>
+        <b>Ahmed M.</b>
+        <div class="delta">Rating: 4.9/5</div>
+      </div>
+    </div>
+
+    <!-- STAFF LIST -->
+    <div class="panel glass-card">
+      <div class="panel-head">
+        <h3>Staff Members</h3>
+        <div style="display:flex;gap:8px">
+          <select id="roleFilter" style="padding:8px 12px;border-radius:var(--radius-sm);border:1px solid var(--glass-border);background:var(--bg-raised);color:var(--cream)">
+            <option value="">All Roles</option>
+            <option value="Manager">Manager</option>
+            <option value="Chef">Chef</option>
+            <option value="Waiter">Waiter</option>
+            <option value="Cashier">Cashier</option>
+            <option value="Kitchen Staff">Kitchen Staff</option>
+          </select>
+          <input type="text" id="empSearch" placeholder="Search staff..." style="width:180px;padding:8px 12px;border-radius:var(--radius-sm);border:1px solid var(--glass-border);background:var(--bg-raised);color:var(--cream);">
+        </div>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Role</th>
+            <th>Phone</th>
+            <th>Hire Date</th>
+            <th>Status</th>
+            <th>Performance</th>
+            <th>Salary</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="staffTable">
+          <tr><td colspan="8" style="text-align:center;color:var(--muted)">Loading staff...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- TODAY'S ATTENDANCE -->
+    <div class="panel glass-card" style="margin-top:30px">
+      <h3 style="margin-bottom:16px">Today's Attendance</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Check In</th>
+            <th>Check Out</th>
+            <th>Hours Worked</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="attendanceTable">
+          <tr><td colspan="5" style="text-align:center;color:var(--muted)">No attendance records</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<!-- EMPLOYEE MODAL -->
+<div id="empModal" class="cart-overlay" style="display:none;z-index:2000"></div>
+<div id="empFormModal" class="glass-card" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2001;width:92%;max-width:500px;padding:32px;max-height:90vh;overflow-y:auto">
+  <h3 style="margin-bottom:20px">Employee Details</h3>
+  <div class="form-grid">
+    <div class="field"><label>Full Name</label><input type="text" id="empName"></div>
+    <div class="field"><label>Role</label><select id="empRole">
+      <option value="Manager">Manager</option>
+      <option value="Chef">Chef</option>
+      <option value="Waiter">Waiter</option>
+      <option value="Cashier">Cashier</option>
+      <option value="Kitchen Staff">Kitchen Staff</option>
+    </select></div>
+    <div class="field"><label>Phone</label><input type="tel" id="empPhone"></div>
+    <div class="field"><label>Email</label><input type="email" id="empEmail"></div>
+    <div class="field"><label>Hire Date</label><input type="date" id="empHireDate"></div>
+    <div class="field"><label>Monthly Salary</label><input type="number" id="empSalary" min="0" step="100"></div>
+  </div>
+  <div style="display:flex;gap:10px;margin-top:20px">
+    <button class="btn btn-gold btn-block" id="saveEmpBtn">Save Employee</button>
+    <button class="btn btn-ghost btn-block" id="closeEmpModal">Cancel</button>
+  </div>
+</div>
+
+<div id="toast-wrap"></div>
+<script src="../assets/js/data.js"></script>
+<script>
+const db = HIIL.load();
+
+// Generate sample staff
+function generateSampleStaff() {
+  const roles = ['Manager', 'Chef', 'Waiter', 'Cashier', 'Kitchen Staff'];
+  const names = ['Ahmed Hassan', 'Fatima Mohamed', 'Ibrahim Ali', 'Aisha Ismail', 'Hassan Ahmed', 'Maryam Khan', 'Omar Ibrahim', 'Layla Hassan', 'Ali Mohammed', 'Sara Ali'];
+  
+  return names.map((name, i) => ({
+    id: i + 1,
+    name,
+    role: roles[i % roles.length],
+    phone: '+252' + (634000000 + i).toString().slice(-8),
+    email: name.toLowerCase().replace(' ', '.') + '@hiilcafe.com',
+    hireDate: new Date(2023 + Math.floor(i/2), i % 12, (i % 28) + 1).toLocaleDateString(),
+    status: Math.random() > 0.1 ? 'Active' : 'On Leave',
+    performance: (4 + Math.random()).toFixed(1),
+    salary: (1500 + i * 200).toLocaleString()
+  }));
+}
+
+db.staff = db.staff || generateSampleStaff();
+
+function renderStaff() {
+  const table = document.getElementById('staffTable');
+  const staff = db.staff;
+  
+  table.innerHTML = staff.map(emp => `
+    <tr class="reveal-stagger-${Math.random() < 0.5 ? 1 : 2}">
+      <td>${emp.name}</td>
+      <td><span class="eyebrow" style="font-size:.7rem;margin:0">${emp.role}</span></td>
+      <td>${emp.phone}</td>
+      <td>${emp.hireDate}</td>
+      <td><span class="status-chip" style="display:inline-block;background:${emp.status === 'Active' ? 'rgba(95,168,118,.18)' : 'rgba(217,154,61,.18)'};color:${emp.status === 'Active' ? 'var(--success)' : 'var(--warn)'}">${emp.status}</span></td>
+      <td><span class="rating"><i class="fa-solid fa-star"></i> ${emp.performance}</span></td>
+      <td>${emp.salary}</td>
+      <td><button class="btn btn-ghost btn-sm" onclick="editEmployee(${emp.id})"><i class="fa-solid fa-edit"></i></button></td>
+    </tr>
+  `).join('');
+  
+  updateStats();
+}
+
+function updateStats() {
+  const staff = db.staff;
+  document.getElementById('totalStaff').textContent = staff.length;
+  document.getElementById('presentCount').textContent = staff.filter(s => s.status === 'Active').length;
+  document.getElementById('leaveCount').textContent = staff.filter(s => s.status === 'On Leave').length;
+}
+
+function editEmployee(id) {
+  const emp = db.staff.find(e => e.id === id);
+  if (emp) {
+    document.getElementById('empName').value = emp.name;
+    document.getElementById('empRole').value = emp.role;
+    document.getElementById('empPhone').value = emp.phone;
+    document.getElementById('empEmail').value = emp.email;
+    document.getElementById('empHireDate').value = emp.hireDate;
+    document.getElementById('empSalary').value = emp.salary.replace(/,/g, '');
+  }
+  document.getElementById('empModal').style.display = 'block';
+  document.getElementById('empFormModal').style.display = 'block';
+}
+
+document.getElementById('saveEmpBtn').addEventListener('click', () => {
+  const name = document.getElementById('empName').value;
+  if (!name) {
+    toast('Please enter employee name', 'err');
+    return;
+  }
+  toast('Employee information saved');
+  closeEmpModal();
+});
+
+document.getElementById('closeEmpModal').addEventListener('click', closeEmpModal);
+function closeEmpModal() {
+  document.getElementById('empModal').style.display = 'none';
+  document.getElementById('empFormModal').style.display = 'none';
+}
+
+document.getElementById('empSearch').addEventListener('input', (e) => {
+  const query = e.target.value.toLowerCase();
+  const rows = document.querySelectorAll('#staffTable tr');
+  rows.forEach(row => {
+    const text = row.textContent.toLowerCase();
+    row.style.display = text.includes(query) ? '' : 'none';
+  });
+});
+
+renderStaff();
+</script>
+</body>
+</html>

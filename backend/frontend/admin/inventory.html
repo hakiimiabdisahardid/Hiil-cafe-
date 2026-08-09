@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inventory Management — HIIL CAFE Admin</title>
+<link rel="stylesheet" href="../assets/css/style.css">
+<link rel="stylesheet" href="../assets/css/premium-effects.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <a href="../index.html" class="brand"><span class="brand-mark" aria-label="HIIL logo">H</span> HIIL ADMIN</a>
+    <div class="side-group">Management</div>
+    <a href="dashboard.html" class="side-link"><i class="fa-solid fa-gauge"></i> Overview</a>
+    <a href="tables.html" class="side-link"><i class="fa-solid fa-chair"></i> Tables</a>
+    <a href="inventory.html" class="side-link active"><i class="fa-solid fa-boxes-stacked"></i> Inventory</a>
+    <a href="customers.html" class="side-link"><i class="fa-solid fa-users"></i> Customers</a>
+    <div class="side-group">Operations</div>
+    <a href="kitchen.html" class="side-link"><i class="fa-solid fa-kitchen-set"></i> Kitchen</a>
+    <a href="employees.html" class="side-link"><i class="fa-solid fa-people-group"></i> Staff</a>
+    <div class="side-group">Business</div>
+    <a href="discounts.html" class="side-link"><i class="fa-solid fa-tag"></i> Promotions</a>
+    <a href="reports.html" class="side-link"><i class="fa-solid fa-chart-line"></i> Reports</a>
+    <a href="settings.html" class="side-link"><i class="fa-solid fa-gear"></i> Settings</a>
+    <div class="side-group">Account</div>
+    <a href="login.html" class="side-link"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+  </aside>
+
+  <main class="main-panel">
+    <div class="topbar">
+      <div>
+        <h2 class="display-md" style="margin-bottom:4px">Inventory Management</h2>
+        <p class="desc">Track ingredients, food stock, and supplier information.</p>
+      </div>
+      <button class="btn btn-gold" id="addItemBtn"><i class="fa-solid fa-plus"></i> Add Item</button>
+    </div>
+
+    <!-- INVENTORY ALERTS -->
+    <div class="kpi-grid" style="margin-bottom:30px">
+      <div class="kpi-card glass-card">
+        <div class="top"><i class="fa-solid fa-boxes-stacked"></i> Total Items</div>
+        <b id="totalItems">127</b>
+        <div class="delta">In stock</div>
+      </div>
+      <div class="kpi-card glass-card">
+        <div class="top"><i class="fa-solid fa-triangle-exclamation" style="color:var(--warn)"></i> Low Stock</div>
+        <b id="lowStockCount">12</b>
+        <div class="delta">Need reorder</div>
+      </div>
+      <div class="kpi-card glass-card">
+        <div class="top"><i class="fa-solid fa-xmark" style="color:var(--danger)"></i> Out of Stock</div>
+        <b id="outOfStockCount">3</b>
+        <div class="delta">Urgent</div>
+      </div>
+      <div class="kpi-card glass-card">
+        <div class="top"><i class="fa-solid fa-calendar"></i> Expiring Soon</div>
+        <b id="expiringCount">5</b>
+        <div class="delta">Next 7 days</div>
+      </div>
+    </div>
+
+    <!-- INVENTORY TABLE -->
+    <div class="panel glass-card">
+      <div class="panel-head">
+        <h3>Stock Items</h3>
+        <div style="display:flex;gap:8px">
+          <select id="categoryFilter" style="padding:8px 12px;border-radius:var(--radius-sm);border:1px solid var(--glass-border);background:var(--bg-raised);color:var(--cream)">
+            <option value="">All Categories</option>
+            <option value="Ingredients">Ingredients</option>
+            <option value="Beverages">Beverages</option>
+            <option value="Dairy">Dairy</option>
+            <option value="Spices">Spices</option>
+            <option value="Equipment">Equipment</option>
+          </select>
+          <input type="text" id="inventorySearch" placeholder="Search items..." style="width:180px;padding:8px 12px;border-radius:var(--radius-sm);border:1px solid var(--glass-border);background:var(--bg-raised);color:var(--cream);">
+        </div>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Item Name</th>
+            <th>Category</th>
+            <th>Quantity</th>
+            <th>Unit</th>
+            <th>Status</th>
+            <th>Supplier</th>
+            <th>Expiry Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="inventoryTable">
+          <tr><td colspan="8" style="text-align:center;color:var(--muted)">Loading inventory...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- SUPPLIER MANAGEMENT -->
+    <div class="panel glass-card" style="margin-top:30px">
+      <h3 style="margin-bottom:16px">Top Suppliers</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Supplier Name</th>
+            <th>Contact</th>
+            <th>Items Supplied</th>
+            <th>Last Order</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="suppliersTable">
+          <tr><td colspan="5" style="text-align:center;color:var(--muted)">No suppliers</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<!-- INVENTORY ITEM MODAL -->
+<div id="inventoryModal" class="cart-overlay" style="display:none;z-index:2000"></div>
+<div id="inventoryFormModal" class="glass-card" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2001;width:92%;max-width:500px;padding:32px;max-height:90vh;overflow-y:auto">
+  <h3 style="margin-bottom:20px">Add/Edit Item</h3>
+  <div class="form-grid">
+    <div class="field"><label>Item Name</label><input type="text" id="itemName"></div>
+    <div class="field"><label>Category</label><select id="itemCategory">
+      <option value="Ingredients">Ingredients</option>
+      <option value="Beverages">Beverages</option>
+      <option value="Dairy">Dairy</option>
+      <option value="Spices">Spices</option>
+      <option value="Equipment">Equipment</option>
+    </select></div>
+    <div class="field"><label>Quantity</label><input type="number" id="itemQuantity" min="0"></div>
+    <div class="field"><label>Unit</label><input type="text" id="itemUnit" placeholder="kg, L, pieces..."></div>
+    <div class="field"><label>Min Stock Level</label><input type="number" id="itemMinStock" min="0"></div>
+    <div class="field"><label>Supplier</label><input type="text" id="itemSupplier"></div>
+    <div class="field"><label>Expiry Date</label><input type="date" id="itemExpiry"></div>
+    <div class="field"><label>Cost per Unit</label><input type="number" id="itemCost" min="0" step="0.01"></div>
+  </div>
+  <div style="display:flex;gap:10px;margin-top:20px">
+    <button class="btn btn-gold btn-block" id="saveInventoryBtn">Save Item</button>
+    <button class="btn btn-ghost btn-block" id="closeInventoryModal">Cancel</button>
+  </div>
+</div>
+
+<div id="toast-wrap"></div>
+<script src="../assets/js/data.js"></script>
+<script>
+const db = HIIL.load();
+
+// Generate sample inventory
+function generateSampleInventory() {
+  return [
+    { id: 1, name: 'Tomatoes', category: 'Ingredients', qty: 25, unit: 'kg', minStock: 10, supplier: 'Green Valley Farm', expiry: '2026-01-25', cost: 2.5, status: 'OK' },
+    { id: 2, name: 'Cheese', category: 'Dairy', qty: 8, unit: 'kg', minStock: 15, supplier: 'Dairy Co', expiry: '2026-02-01', cost: 12, status: 'LOW' },
+    { id: 3, name: 'Saffron', category: 'Spices', qty: 0.5, unit: 'kg', minStock: 1, supplier: 'Eastern Spice', expiry: '2027-01-15', cost: 45, status: 'OK' },
+    { id: 4, name: 'Fresh Milk', category: 'Dairy', qty: 0, unit: 'L', minStock: 5, supplier: 'Dairy Co', expiry: '2026-01-18', cost: 1.2, status: 'OUT' },
+    { id: 5, name: 'Butter', category: 'Dairy', qty: 3, unit: 'kg', minStock: 5, supplier: 'Dairy Co', expiry: '2026-02-15', cost: 8, status: 'LOW' },
+  ];
+}
+
+db.inventory = db.inventory || generateSampleInventory();
+
+function renderInventory() {
+  const table = document.getElementById('inventoryTable');
+  const items = db.inventory;
+  
+  table.innerHTML = items.map(item => `
+    <tr class="reveal-stagger-${Math.random() < 0.5 ? 1 : 2}">
+      <td>${item.name}</td>
+      <td><span class="eyebrow" style="font-size:.7rem;margin:0">${item.category}</span></td>
+      <td><strong>${item.qty}</strong></td>
+      <td>${item.unit}</td>
+      <td><span class="status-chip" style="display:inline-block" class="status-${item.status.toLowerCase()}">${item.status}</span></td>
+      <td>${item.supplier}</td>
+      <td>${new Date(item.expiry).toLocaleDateString()}</td>
+      <td><button class="btn btn-ghost btn-sm" onclick="editInventory(${item.id})"><i class="fa-solid fa-edit"></i></button></td>
+    </tr>
+  `).join('');
+  
+  updateStats();
+}
+
+function updateStats() {
+  const items = db.inventory;
+  document.getElementById('totalItems').textContent = items.length;
+  document.getElementById('lowStockCount').textContent = items.filter(i => i.status === 'LOW').length;
+  document.getElementById('outOfStockCount').textContent = items.filter(i => i.status === 'OUT').length;
+  
+  const soon = items.filter(i => {
+    const exp = new Date(i.expiry);
+    const now = new Date();
+    const days = (exp - now) / (1000 * 60 * 60 * 24);
+    return days >= 0 && days <= 7;
+  }).length;
+  document.getElementById('expiringCount').textContent = soon;
+}
+
+function editInventory(id) {
+  const item = db.inventory.find(i => i.id === id);
+  if (item) {
+    document.getElementById('itemName').value = item.name;
+    document.getElementById('itemCategory').value = item.category;
+    document.getElementById('itemQuantity').value = item.qty;
+    document.getElementById('itemUnit').value = item.unit;
+    document.getElementById('itemMinStock').value = item.minStock;
+    document.getElementById('itemSupplier').value = item.supplier;
+    document.getElementById('itemExpiry').value = item.expiry;
+    document.getElementById('itemCost').value = item.cost;
+  }
+  document.getElementById('inventoryModal').style.display = 'block';
+  document.getElementById('inventoryFormModal').style.display = 'block';
+}
+
+document.getElementById('saveInventoryBtn').addEventListener('click', () => {
+  const name = document.getElementById('itemName').value;
+  const qty = parseFloat(document.getElementById('itemQuantity').value);
+  
+  if (!name || qty < 0) {
+    toast('Please fill in all required fields', 'err');
+    return;
+  }
+  
+  const item = {
+    id: db.inventory.length + 1,
+    name,
+    category: document.getElementById('itemCategory').value,
+    qty,
+    unit: document.getElementById('itemUnit').value,
+    minStock: parseInt(document.getElementById('itemMinStock').value),
+    supplier: document.getElementById('itemSupplier').value,
+    expiry: document.getElementById('itemExpiry').value,
+    cost: parseFloat(document.getElementById('itemCost').value),
+    status: qty === 0 ? 'OUT' : qty < parseInt(document.getElementById('itemMinStock').value) ? 'LOW' : 'OK'
+  };
+  
+  db.inventory.push(item);
+  HIIL.save(db);
+  renderInventory();
+  closeInventoryModal();
+  toast('Inventory item added');
+});
+
+document.getElementById('closeInventoryModal').addEventListener('click', closeInventoryModal);
+function closeInventoryModal() {
+  document.getElementById('inventoryModal').style.display = 'none';
+  document.getElementById('inventoryFormModal').style.display = 'none';
+}
+
+document.getElementById('addItemBtn').addEventListener('click', () => {
+  document.getElementById('itemName').value = '';
+  document.getElementById('itemQuantity').value = '';
+  editInventory(null);
+});
+
+renderInventory();
+</script>
+</body>
+</html>

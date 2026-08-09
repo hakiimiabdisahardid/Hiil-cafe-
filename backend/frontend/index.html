@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HIIL CAFE — Modern Luxury Dining</title>
+<meta name="description" content="HIIL CAFE — premium modern dining, VIP rooms, curated menu, and effortless table reservations.">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/premium-effects.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+<div id="loader">
+  <div class="loader-mark">H</div>
+  <div class="loader-text">HIIL CAFE</div>
+</div>
+
+<nav class="site-nav">
+  <div class="container">
+    <a href="index.html" class="brand"><span class="brand-mark" aria-label="HIIL logo">H</span> HIIL CAFE</a>
+    <div class="nav-links">
+      <a href="index.html" class="active">Home</a>
+      <a href="menu.html">Menu</a>
+      <a href="reserve.html">Reserve</a>
+      <a href="index.html#experience">Experience</a>
+      <a href="index.html#contact">Contact</a>
+    </div>
+    <div class="nav-actions">
+      <button class="btn btn-ghost btn-sm theme-toggle-btn" data-theme-toggle><i class="fa-solid fa-sun"></i> Light</button>
+      <a href="admin/login.html" class="btn btn-ghost btn-sm"><i class="fa-solid fa-lock"></i> Staff Login</a>
+      <a href="menu.html" class="btn btn-gold btn-sm">Order Now</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-bg" id="heroParticles" style="--hero-image-url: url('https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1600&q=80');">
+    <div class="hero-grain"></div>
+  </div>
+  <div class="container hero-content">
+    <div class="eyebrow" id="heroEyebrow">Hargeisa's Table for Every Occasion</div>
+    <h1 class="display-hero" id="heroTitle">Welcome to <em style="font-style:italic;color:var(--gold-bright)">Hiil Cafe</em>.</h1>
+    <p class="lead" id="heroSubtitle"> brings together a chef-driven menu, warm hospitality, and a memorable dining experience for coffee, lunch, dinner, and private gatherings. Thank you for letting us host you.</p>
+    <div class="hero-actions">
+      <a href="menu.html" class="btn btn-gold" id="heroPrimaryCta">Explore Menu <i class="fa-solid fa-arrow-right"></i></a>
+      <a href="reserve.html" class="btn btn-ghost" id="heroSecondaryCta">Reserve VIP Table <i class="fa-solid fa-crown"></i></a>
+    </div>
+    <div class="hero-stats" id="heroStats"></div>
+  </div>
+</header>
+
+<div class="thread-divider"></div>
+
+<!-- FEATURED MENU -->
+<section id="featured">
+  <div class="container">
+    <div class="section-head reveal">
+      <div>
+        <div class="eyebrow">From the Kitchen</div>
+        <h2 class="display-lg">Featured this week</h2>
+      </div>
+      <a href="menu.html" class="btn btn-outline-gold btn-sm">Full Menu <i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+    <div class="grid grid-4" id="featuredGrid"></div>
+  </div>
+</section>
+
+<div class="thread-divider"></div>
+
+<!-- VIP & FAMILY DINING -->
+<section id="vip" style="background:linear-gradient(180deg, transparent, rgba(107,31,42,.06), transparent)">
+  <div class="container">
+    <div class="section-head reveal">
+      <div>
+        <div class="eyebrow">Private & Celebration Spaces</div>
+        <h2 class="display-lg">VIP &amp; Family Dining</h2>
+        <p class="lead" style="margin-top:14px">Rooms built for the moment — an anniversary, a birthday, a business dinner that needs to close well.</p>
+      </div>
+    </div>
+    <div class="grid grid-3">
+      <div class="glass-card reveal" style="overflow:hidden">
+        <img src="https://images.unsplash.com/photo-1590846406792-0adc7f938f1d?q=80&w=900" alt="VIP room" style="height:220px;width:100%;object-fit:cover">
+        <div style="padding:22px">
+          <h4>VIP Room</h4>
+          <p class="desc">Private dining for up to 8 guests with dedicated service.</p>
+          <a href="reserve.html?type=vip" class="btn btn-outline-gold btn-sm btn-block" style="margin-top:16px">Reserve VIP</a>
+        </div>
+      </div>
+      <div class="glass-card reveal reveal-delay-1" style="overflow:hidden">
+        <img src="https://images.unsplash.com/photo-1529543544282-ea669407fca0?q=80&w=900" alt="Family dinner" style="height:220px;width:100%;object-fit:cover">
+        <div style="padding:22px">
+          <h4>Family &amp; Birthday</h4>
+          <p class="desc">Warm seating for family gatherings and birthday celebrations.</p>
+          <a href="reserve.html?type=family" class="btn btn-outline-gold btn-sm btn-block" style="margin-top:16px">Reserve Table</a>
+        </div>
+      </div>
+      <div class="glass-card reveal reveal-delay-2" style="overflow:hidden">
+        <img src="https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?q=80&w=900" alt="Business meeting" style="height:220px;width:100%;object-fit:cover">
+        <div style="padding:22px">
+          <h4>Business Meetings</h4>
+          <p class="desc">Comfortable private seating for meetings, lunch catch-ups, and client visits.</p>
+          <a href="reserve.html?type=business" class="btn btn-outline-gold btn-sm btn-block" style="margin-top:16px">Book a Space</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="thread-divider"></div>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="container">
+    <div class="section-head reveal">
+      <div><div class="eyebrow">Why Guests Return</div><h2 class="display-lg">The HIIL Experience</h2></div>
+    </div>
+
+    <div class="stat-strip reveal" style="margin-bottom:60px">
+      <div class="glass-card stat-box"><b>25,000+</b><span>Happy Customers</span></div>
+      <div class="glass-card stat-box"><b>4.9 / 5</b><span>Average Rating</span></div>
+      <div class="glass-card stat-box"><b>8</b><span>Culinary Awards</span></div>
+      <div class="glass-card stat-box"><b>12</b><span>Years of Craft</span></div>
+    </div>
+
+    <div class="grid grid-3" style="margin-bottom:60px">
+      <div class="glass-card testi-card reveal">
+        <div class="stars">★★★★★</div>
+        <p>"Best atmosphere in Hargeisa. The saffron latte alone is worth the visit."</p>
+        <div class="testi-who"><div class="avatar">A</div><div><strong>Amina Y.</strong><small>Verified Guest</small></div></div>
+      </div>
+      <div class="glass-card testi-card reveal reveal-delay-1">
+        <div class="stars">★★★★★</div>
+        <p>"We hosted our engagement dinner in the VIP room — flawless service all night."</p>
+        <div class="testi-who"><div class="avatar">K</div><div><strong>Khalid W.</strong><small>Verified Guest</small></div></div>
+      </div>
+      <div class="glass-card testi-card reveal reveal-delay-2">
+        <div class="stars">★★★★★</div>
+        <p>"QR ordering meant zero waiting. Food arrived exactly as pictured."</p>
+        <div class="testi-who"><div class="avatar">S</div><div><strong>Sara A.</strong><small>Verified Guest</small></div></div>
+      </div>
+    </div>
+
+    <div class="reveal">
+      <div class="eyebrow" style="margin-bottom:16px">Gallery</div>
+      <div class="gallery-grid">
+        <a href="#"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRegRIlXG-DEE8lJXbckwhSIjqQODMPMIbCt52kMvWgEyOXD1qse4mi5N0&s=10" alt=""></a>
+        <a href="#"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbrAvLeG2PHnSQsjYTVat8CKpBwP1vpJnasQbplOsJKpNZNeYgO3m46aTH&s=10" alt=""></a>
+        <a href="#"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTILIjXpXng8XWyotp39P0GZW11goYf5weUpR6IEgf7ZE_HYGKwxTfmxccb&s=10" alt=""></a>
+        <a href="#"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmBxaKrYiuwQbNF5ApZ8TlLf81hKNbvrsR4KmD-HoSs8gfmvnm8KJeVvw&s=10" alt=""></a>
+        <a href="#"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmBxaKrYiuwQbNF5ApZ8TlLf81hKNbvrsR4KmD-HoSs8gfmvnm8KJeVvw&s=10" alt=""></a>
+        <a href="#"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQn8m2kpCF-_XEr2ZWKBf7mxqd3QJp1NzgVsl1xL7iLkuMzyhfBhTCqxGwo&s=10" alt=""></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="thread-divider"></div>
+
+<!-- CHEF -->
+<section id="chef">
+  <div class="container">
+    <div class="glass-card reveal" style="display:grid;grid-template-columns:1fr 1.4fr;gap:0;overflow:hidden">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfrVTGCAnGLhHLuL9X9BnxPJoMtoz3R8Nx9g0ibcYTKTi_itKVFAPQxchq&s=10" alt="Head chef" style="height:100%;width:100%;object-fit:cover;min-height:320px">
+      <div style="padding:44px">
+        <div class="eyebrow">Chef</div>
+        <h2 class="display-md" style="margin-top:12px"> Mohamed</h2>
+        <p class="lead" style="margin-top:14px">Twelve years across coastal and continental kitchens, Mohamed leads HIIL's menu with a simple rule: honest ingredients, precise technique, no shortcuts. Every dish on the menu carries his signature — bold spice, clean plating, and a nod to home.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="thread-divider"></div>
+
+<!-- CONTACT / ABOUT -->
+<section id="contact">
+  <div class="container">
+    <div class="grid grid-3" style="grid-template-columns:1.3fr 1fr 1fr">
+      <div class="reveal">
+        <div class="eyebrow">About HIIL CAFE</div>
+        <h2 class="display-lg" style="margin-top:12px" id="missionTitle">Our mission</h2>
+        <p class="lead" style="margin-top:16px" id="missionText">To make every table feel like the best seat in the city — through honest food, warm service, and a room worth returning to. Our vision is to become the region's most loved dining destination, one plate at a time.</p>
+      </div>
+      <div class="glass-card reveal reveal-delay-1" style="padding:28px">
+        <h4 style="margin-bottom:16px" id="contactTitle">Visit Us</h4>
+        <p class="desc"><i class="fa-solid fa-location-dot" style="color:var(--gold)"></i> &nbsp;<span id="contactLocation">Airport Road, Hargeisa, Somaliland</span></p>
+        <p class="desc" style="margin-top:10px"><i class="fa-solid fa-clock" style="color:var(--gold)"></i> &nbsp;<span id="contactHours">06:00 – 00:00 Daily</span></p>
+        <p class="desc" style="margin-top:10px"><i class="fa-solid fa-phone" style="color:var(--gold)"></i> &nbsp;<a href="tel:+252633338801" style="color:inherit;text-decoration:none" id="contactPhone">+252 633 338801</a></p>
+        <p class="desc" style="margin-top:10px"><i class="fa-brands fa-whatsapp" style="color:var(--gold)"></i> &nbsp;<span id="contactWhatsApp">+252 63 888 3301</span></p>
+        <p class="desc" style="margin-top:10px"><i class="fa-solid fa-envelope" style="color:var(--gold)"></i> &nbsp;<a href="mailto:hiilcafe@gmail.com" style="color:inherit;text-decoration:none" id="contactEmail">hiilcafe@gmail.com</a></p>
+      </div>
+      <div class="glass-card reveal reveal-delay-2" style="padding:0;overflow:hidden;min-height:220px">
+        <iframe title="map" style="width:100%;height:100%;min-height:220px;border:0" loading="lazy"
+          src="https://www.google.com/maps?q=Hargeisa,Somaliland&output=embed"></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <a href="index.html" class="brand"><span class="brand-mark" aria-label="HIIL CAFE logo">H</span></a>
+        <p class="desc" style="margin-top:16px;max-width:280px" id="footerDescription">Modern dining, timeless hospitality. Haleelo Tawer, Hargeisa.</p>
+        <div class="social-row">
+          <a href="https://www.facebook.com/share/r/1DkaHNDLyJ/" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="https://www.instagram.com/reel/DXd2p3sgOxk/?utm_source=ig_web_button_share_sheet" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="https://github.com/your-github-username" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+          <a href="https://www.tiktok.com/@hiil.cafe.hargeis?is_from_webapp=1&sender_device=pc" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+          <a href="tel:+252633338801" aria-label="Phone"><i class="fa-solid fa-phone"></i></a>
+        </div>
+      </div>
+      <div>
+        <h5>Explore</h5>
+        <ul><li><a href="menu.html">Menu</a></li><li><a href="reserve.html">Reservations</a></li><li><a href="index.html#experience">Gallery</a></li><li><a href="index.html#contact">Contact</a></li></ul>
+      </div>
+      <div>
+        <h5>Company</h5>
+        <ul><li><a href="index.html#contact">About</a></li><li><a href="#">Careers</a></li><li><a href="admin/login.html">Staff Login</a></li><li><a href="#">Support</a></li></ul>
+      </div>
+      <div>
+        <h5>Customer Support</h5>
+        <ul><li><a href="tel:+252638883301">+252 63 888 3301</a></li><li><a href="mailto:hiilcafe@gmail.com">hiilcafe@gmail.com</a></li><li><a href="#">06:00 – 00:00 Daily</a></li></ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 HIIL CAFE. All rights reserved.</span>
+      <span>Crafted with care in Hargeisa</span>
+    </div>
+  </div>
+</footer>
+
+<div id="toast-wrap"></div>
+<script src="assets/js/data.js"></script>
+<script>
+  initLoader(); initNavScroll(); initRevealOnScroll(); initThemeToggle();
+  initHeroParticles(document.getElementById('heroParticles'), 20);
+
+  const db = HIIL.load();
+  const content = db.siteContent || {};
+
+  document.getElementById('heroEyebrow').textContent = content.heroEyebrow || document.getElementById('heroEyebrow').textContent;
+  document.getElementById('heroTitle').innerHTML = `${content.heroTitle || 'Welcome to '} <em style="font-style:italic;color:var(--gold-bright)">Hiil Cafe</em>.`;
+  document.getElementById('heroSubtitle').textContent = content.heroSubtitle || document.getElementById('heroSubtitle').textContent;
+  document.getElementById('heroPrimaryCta').innerHTML = `${content.heroPrimaryCta || 'Explore Menu'} <i class="fa-solid fa-arrow-right"></i>`;
+  document.getElementById('heroSecondaryCta').innerHTML = `${content.heroSecondaryCta || 'Reserve VIP Table'} <i class="fa-solid fa-crown"></i>`;
+
+  const heroStats = document.getElementById('heroStats');
+  heroStats.innerHTML = (content.stats || []).map(stat => `<div><b>${stat.value}</b><span>${stat.label}</span></div>`).join('');
+
+  document.getElementById('missionTitle').textContent = content.missionTitle || document.getElementById('missionTitle').textContent;
+  document.getElementById('missionText').textContent = content.missionText || document.getElementById('missionText').textContent;
+  document.getElementById('contactTitle').textContent = content.contactTitle || document.getElementById('contactTitle').textContent;
+  document.getElementById('contactLocation').textContent = content.contact?.location || document.getElementById('contactLocation').textContent;
+  document.getElementById('contactHours').textContent = content.contact?.hours || document.getElementById('contactHours').textContent;
+  document.getElementById('contactPhone').textContent = content.contact?.phone || document.getElementById('contactPhone').textContent;
+  document.getElementById('contactPhone').parentElement.setAttribute('href', `tel:${(content.contact?.phone || '').replace(/[^0-9+]/g, '')}`);
+  document.getElementById('contactWhatsApp').textContent = content.contact?.whatsapp || document.getElementById('contactWhatsApp').textContent;
+  document.getElementById('contactEmail').textContent = content.contact?.email || document.getElementById('contactEmail').textContent;
+  document.getElementById('contactEmail').parentElement.setAttribute('href', `mailto:${content.contact?.email || ''}`);
+  document.getElementById('footerDescription').textContent = content.footerDescription || document.getElementById('footerDescription').textContent;
+
+  const featured = db.menu.filter(m=>m.popular).slice(0,4);
+  const grid = document.getElementById('featuredGrid');
+  const favs = HIIL.getFavs();
+  grid.innerHTML = featured.map(m => `
+    <div class="food-card reveal">
+      <div class="img-wrap">
+        <img src="${m.img}" alt="${m.name}" loading="lazy">
+        <div class="badges">
+          ${m.popular?'<span class="badge badge-popular">Popular</span>':''}
+          ${m.isNew?'<span class="badge badge-new">New</span>':''}
+          ${m.discount?`<span class="badge badge-discount">-${m.discount}%</span>`:''}
+        </div>
+        <button class="fav-btn ${favs.includes(m.id)?'active':''}" data-id="${m.id}"><i class="fa-solid fa-heart"></i></button>
+      </div>
+      <div class="body">
+        <div class="row-top"><h4>${m.name}</h4><span class="price">${fmtMoney(m.price)}</span></div>
+        <p class="desc">${m.desc}</p>
+        <div class="meta-row">
+          <span class="rating"><i class="fa-solid fa-star"></i> ${m.rating}</span>
+          <span class="avail ${m.available?'yes':'no'}">${m.available?'Available':'Sold Out'}</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+  initRevealOnScroll();
+
+  grid.addEventListener('click', (e)=>{
+    const btn = e.target.closest('.fav-btn'); if(!btn) return;
+    const f = HIIL.toggleFav(btn.dataset.id);
+    btn.classList.toggle('active', f.includes(btn.dataset.id));
+    toast(f.includes(btn.dataset.id) ? 'Added to favorites' : 'Removed from favorites');
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reserve a Table — HIIL CAFE</title>
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/premium-effects.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+<nav class="site-nav scrolled">
+  <div class="container">
+    <a href="index.html" class="brand"><span class="brand-mark" aria-label="HIIL CAFE logo">H</span></a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="menu.html">Menu</a>
+      <a href="reserve.html" class="active">Reserve</a>
+      <a href="index.html#experience">Experience</a>
+      <a href="index.html#contact">Contact</a>
+    </div>
+    <div class="nav-actions">
+      <button class="btn btn-ghost btn-sm theme-toggle-btn" data-theme-toggle><i class="fa-solid fa-sun"></i> Light</button>
+      <a href="admin/login.html" class="btn btn-ghost btn-sm"><i class="fa-solid fa-lock"></i> Staff</a>
+    </div>
+  </div>
+</nav>
+
+<header class="page-hero">
+  <div class="hero-bg" style="--hero-image-url: url('https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1600&q=80');">
+    <div class="hero-grain"></div>
+  </div>
+  <div class="container" style="max-width:760px">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="brand-mark" aria-label="HIIL logo">H</span>
+        <span class="eyebrow" style="margin:0">Luxury Reservations</span>
+      </div>
+      <div class="eyebrow">Book Ahead</div>
+      <h1 class="display-hero" style="margin-top:12px">Reserve your table</h1>
+      <p class="lead" style="margin-top:10px;max-width:700px">Tell us the occasion — we'll have your table ready with warm hospitality, elegant seating, and a smooth booking experience.</p>
+      <div class="hero-actions">
+        <a href="menu.html" class="btn btn-gold">View Menu <i class="fa-solid fa-arrow-right"></i></a>
+        <a href="index.html#contact" class="btn btn-ghost">Contact the team</a>
+      </div>
+      <div class="reserve-highlights">
+        <div class="glass-card" style="padding:18px"><h4 style="margin:0 0 6px">VIP Rooms</h4><p class="desc" style="margin:0">Private moments, elevated service.</p></div>
+        <div class="glass-card" style="padding:18px"><h4 style="margin:0 0 6px">Family Dining</h4><p class="desc" style="margin:0">Comfortable and celebratory spaces.</p></div>
+        <div class="glass-card" style="padding:18px"><h4 style="margin:0 0 6px">Business Meetups</h4><p class="desc" style="margin:0">Polished settings for important visits.</p></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section style="padding-top:24px">
+  <div class="container" style="max-width:760px">
+    <form id="resForm" class="glass-card reveal in" style="padding:36px; border:1px solid rgba(201,162,39,.16)">
+      <div class="form-grid">
+        <div class="field"><label>Full Name</label><input required type="text" name="name" placeholder="Your name"></div>
+        <div class="field"><label>Phone Number</label><input required type="tel" name="phone" placeholder="+252 ..."></div>
+        <div class="field"><label>Date</label><input required type="date" name="date"></div>
+        <div class="field"><label>Time</label><input required type="time" name="time"></div>
+        <div class="field"><label>Guests</label><input required type="number" min="1" max="30" name="guests" value="2"></div>
+        <div class="field">
+          <label>Seating Area</label>
+          <select name="area" id="areaSelect">
+            <option value="VIP Room">VIP Room</option>
+            <option value="Family Area">Family Area</option>
+            <option value="Business Meeting">Business Meeting</option>
+            <option value="Private Lounge">Private Lounge</option>
+          </select>
+        </div>
+      </div>
+      <div class="field" style="margin-top:16px">
+        <label>Notes (optional)</label>
+        <textarea name="notes" rows="3" placeholder="Birthday cake, allergy info, seating preference..."></textarea>
+      </div>
+      <button type="submit" class="btn btn-gold btn-block" style="margin-top:26px">Confirm Reservation <i class="fa-solid fa-calendar-check"></i></button>
+    </form>
+
+    <div class="glass-card reveal reveal-delay-1" id="successCard" style="display:none;padding:36px;margin-top:24px;text-align:center">
+      <div style="width:56px;height:56px;border-radius:50%;background:rgba(95,168,118,.15);color:var(--success);display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin:0 auto 16px"><i class="fa-solid fa-check"></i></div>
+      <h3>You're booked!</h3>
+      <p class="desc" style="margin-top:8px">We've reserved your table and sent the details to our host stand. See you soon.</p>
+    </div>
+  </div>
+</section>
+
+<footer style="margin-top:20px">
+  <div class="container foot-bottom" style="border:0;margin:0;padding:24px 0"><span>© 2026 HIIL CAFE</span><span>Airport Road, Hargeisa</span></div>
+</footer>
+
+<div id="toast-wrap"></div>
+<script src="assets/js/data.js"></script>
+<script>
+initNavScroll();
+initRevealOnScroll();
+initThemeToggle();
+const params = new URLSearchParams(location.search);
+const typeMap = { vip:'VIP Room', family:'Family Area', business:'Business Meeting' };
+if(params.get('type') && typeMap[params.get('type')]) document.getElementById('areaSelect').value = typeMap[params.get('type')];
+
+document.getElementById('resForm').addEventListener('submit', (e)=>{
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const db = HIIL.load();
+  const r = {
+    id: 'r_'+Date.now(),
+    name: fd.get('name'), phone: fd.get('phone'), date: fd.get('date'), time: fd.get('time'),
+    guests: parseInt(fd.get('guests')), area: fd.get('area'), notes: fd.get('notes'), status:'confirmed'
+  };
+  db.reservations.unshift(r);
+  HIIL.save(db);
+  HIIL.notifyManager('New reservation request', `${r.name} requested ${r.guests} guests for ${r.area} on ${r.date} at ${r.time}. Phone: ${r.phone}`);
+  e.target.style.display='none';
+  document.getElementById('successCard').style.display='block';
+  toast('Reservation confirmed');
+});
+</script>
+</body>
+</html>

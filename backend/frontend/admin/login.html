@@ -1,0 +1,111 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Staff Login — HIIL CAFE</title>
+<link rel="stylesheet" href="../assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+  .glass-card.login-card {
+    border: none;
+    box-shadow: none;
+    background: rgba(255,255,255,.06);
+    backdrop-filter: blur(16px);
+  }
+</style>
+</head>
+<body>
+<div class="login-wrap">
+  <div class="hero-bg" style="position:fixed; inset:0; background-image:url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRgoI5BDHwLRSHbAFNCBS1kO7om2JoVxNiIvjupoFn1hBCS9xamjOxtwzU&s=10'); background-size:cover; background-position:center; background-repeat:no-repeat; filter:brightness(0.62) contrast(1.05);"></div>
+  <div class="glass-card login-card reveal in">
+    <div style="text-align:center;margin-bottom:26px">
+      <a href="login.html" aria-label="Staff login" style="display:inline-flex;align-items:center;justify-content:center;width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg, var(--gold), #8a5d12);color:#fff;font-size:1.5rem;font-weight:700;text-decoration:none;box-shadow:0 8px 24px rgba(0,0,0,.22);margin:0 auto 14px">H</a>
+      <h2 class="display-md">Staff Login</h2>
+      <p class="desc" style="margin-top:6px">Sign in to manage HIIL CAFE</p>
+    </div>
+    <form id="loginForm">
+      <div class="field" style="margin-bottom:16px">
+        <label>Role</label>
+        <select id="role">
+          <option value="admin">Manager / Admin</option>
+          <option value="kitchen">Kitchen Staff</option>
+        </select>
+      </div>
+      <div class="field" style="margin-bottom:16px">
+        <label>Username</label>
+        <input id="staffName" type="text" placeholder="Create or enter your username" autocomplete="username">
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input id="password" type="password" placeholder="Create or enter your password" autocomplete="current-password">
+      </div>
+      <button type="submit" class="btn btn-gold btn-block" style="margin-top:24px">Create / Sign In <i class="fa-solid fa-arrow-right"></i></button>
+    </form>
+    <div id="loginMessage" class="desc" style="text-align:center;margin-top:12px;min-height:1.2em;color:var(--gold)"></div>
+    <p class="desc" style="text-align:center;margin-top:14px">Enter a username and password to create them the first time, or to update them later.</p>
+    <div style="display:flex;justify-content:flex-end;margin-top:8px">
+      <a href="../index.html" style="color:var(--gold)">← Back to site</a>
+    </div>
+  </div>
+</div>
+<script src="../assets/js/data.js"></script>
+<script>
+const STORAGE_KEY = 'hiilStaffCredentials';
+
+function getStoredCreds(){
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY));
+  } catch {
+    return null;
+  }
+}
+
+function saveCreds(name, password){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({ name, password }));
+}
+
+function showMessage(msg, isError=false){
+  const message = document.getElementById('loginMessage');
+  message.textContent = msg;
+  message.style.color = isError ? '#ff8b8b' : 'var(--gold)';
+}
+
+document.getElementById('loginForm').addEventListener('submit', (e)=>{
+  e.preventDefault();
+  const role = document.getElementById('role').value;
+  const enteredName = document.getElementById('staffName').value.trim();
+  const enteredPassword = document.getElementById('password').value;
+  const saved = getStoredCreds();
+
+  if (!enteredName || !enteredPassword) {
+    showMessage('Please enter both a username and password.', true);
+    return;
+  }
+
+  if (!saved) {
+    saveCreds(enteredName, enteredPassword);
+    document.getElementById('staffName').value = enteredName;
+    document.getElementById('password').value = enteredPassword;
+    showMessage('Username and password created. You are signed in.');
+    window.location.href = role === 'kitchen' ? 'kitchen.html' : 'dashboard.html';
+    return;
+  }
+
+  if (saved.name === enteredName && saved.password === enteredPassword) {
+    showMessage('Welcome back. Signing you in...');
+    window.location.href = role === 'kitchen' ? 'kitchen.html' : 'dashboard.html';
+    return;
+  }
+
+  saveCreds(enteredName, enteredPassword);
+  document.getElementById('staffName').value = enteredName;
+  document.getElementById('password').value = enteredPassword;
+  showMessage('Username and password updated. You are signed in.');
+  window.location.href = role === 'kitchen' ? 'kitchen.html' : 'dashboard.html';
+});
+
+</script>
+</body>
+</html>

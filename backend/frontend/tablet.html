@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Waiter Tablet — HIIL CAFE</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+</head>
+<body>
+  <div class="container" style="padding:32px 20px 80px">
+    <div class="topbar">
+      <div>
+        <div class="eyebrow">Waiter tablet</div>
+        <h1 class="display-md">Live orders for service staff</h1>
+      </div>
+      <a href="index.html" class="btn btn-ghost btn-sm"><i class="fa-solid fa-house"></i> Home</a>
+    </div>
+
+    <div class="grid grid-3" id="tabletGrid"></div>
+  </div>
+
+  <div id="toast-wrap"></div>
+  <script src="assets/js/data.js"></script>
+  <script>
+    function render() {
+      const db = HIIL.load();
+      const pending = db.orders.filter(o => ['New', 'Preparing', 'Ready'].includes(o.status));
+      document.getElementById('tabletGrid').innerHTML = pending.length ? pending.map(o => `
+        <div class="glass-card panel">
+          <div class="panel-head">
+            <h3>${o.no}</h3>
+            <span class="status-chip status-${o.status.toLowerCase()}">${o.status}</span>
+          </div>
+          <p class="desc">Table ${o.table}</p>
+          <ul style="margin:12px 0">
+            ${o.items.map(i => `<li style="display:flex;justify-content:space-between;padding:4px 0"><span>${i.qty}× ${i.name}</span><span>${fmtMoney(i.price * i.qty)}</span></li>`).join('')}
+          </ul>
+          <div class="panel-head" style="margin-bottom:0">
+            <span class="price">${fmtMoney(o.total)}</span>
+            <button class="btn btn-gold btn-sm" data-mark="${o.id}">Mark Served</button>
+          </div>
+        </div>
+      `).join('') : '<div class="glass-card panel" style="grid-column:1/-1"><p class="desc">No active orders right now.</p></div>';
+    }
+
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-mark]');
+      if (!btn) return;
+      const db = HIIL.load();
+      const order = db.orders.find(o => o.id === btn.dataset.mark);
+      if (order) {
+        order.status = 'Served';
+        HIIL.save(db);
+        toast(`Order ${order.no} marked served`);
+        render();
+      }
+    });
+
+    render();
+    setInterval(render, 5000);
+  </script>
+</body>
+</html>
