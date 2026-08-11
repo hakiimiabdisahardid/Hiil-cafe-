@@ -1847,4 +1847,22 @@ footer {
 [data-theme="light"] .category-tabs button {
   background: rgba(20, 15, 8, 0.04);
   border-color: rgba(20, 15, 8, 0.1);
+}[data-theme="light"] .hero-grain {
+  background:
+    linear-gradient(180deg, rgba(255, 246, 232, 0.2), rgba(246, 241, 231, 0.9)),
+    radial-gradient(circle at top, rgba(20, 15, 8, 0.05), transparent 40%);
+}
+
+[data-theme="light"] .hero-bg {
+  filter: brightness(0.8) saturate(1) contrast(1.02);
+}
+
+[data-theme="light"] .display-hero,
+[data-theme="light"] .lead {
+  color: var(--text);
+}
+
+[data-theme="light"] .hero-sparkles span {
+  background: rgba(122, 64, 41, 0.7);
+  box-shadow: 0 0 14px rgba(122, 64, 41, 0.6);
 }
