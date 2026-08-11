@@ -17,7 +17,7 @@ const HIIL = (() => {
 
   const defaultSiteContent = {
     heroEyebrow: "Hargeisa's Table for Every Occasion",
-    heroTitle: "Welcome to HIIL CAFE",
+    heroTitle: "Welcome to ",
     heroSubtitle: "A clear, modern dining experience for coffee, lunch, dinner, and private gatherings. Our team makes every visit feel simple, warm, and memorable.",
     heroPrimaryCta: "Explore Menu",
     heroSecondaryCta: "Reserve VIP Table",
@@ -31,13 +31,13 @@ const HIIL = (() => {
     missionText: "To make every visit feel welcoming, simple, and memorable — from a quick coffee to a private celebration.",
     contactTitle: "Visit Us",
     contact: {
-      location: 'Airport Road, Hargeisa, Somaliland',
+      location: 'Haleelo Tawer, Hargeisa, Somaliland',
       hours: '06:00 – 00:00 Daily',
       phone: '+252 633 338801',
-      whatsapp: '+252 63 888 3302',
+      whatsapp: '+252 63 888 3301',
       email: 'hiilcafe@gmail.com'
     },
-    footerDescription: 'Modern dining, timeless hospitality. Airport Road, Hargeisa.'
+    footerDescription: 'Modern dining, timeless hospitality. Haleelo Tawer, Hargeisa.'
   };
 
   const seed = () => ({
