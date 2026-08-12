@@ -33,7 +33,7 @@ const HIIL = (() => {
     contact: {
       location: 'Haleelo Tawer, Hargeisa, Somaliland',
       hours: '06:00 – 00:00 Daily',
-      phone: '+252 633 338801',
+      phone: '+252 63 888 3301',
       whatsapp: '+252 63 888 3301',
       email: 'hiilcafe@gmail.com'
     },
