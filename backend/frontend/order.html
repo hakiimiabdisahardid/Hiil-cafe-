@@ -60,6 +60,23 @@
 </div>
 <button class="fab-cart" id="fabCart"><i class="fa-solid fa-bag-shopping"></i><span class="count" id="cartCount">0</span></button>
 
+<!-- payment modal -->
+<div id="payOverlay" class="cart-overlay"></div>
+<div id="payModal" class="glass-card" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:4100;width:92%;max-width:420px;padding:36px;text-align:center">
+  <h3>Order <span id="payOrderNo"></span> — <span id="payOrderTotal"></span></h3>
+  <p class="desc" style="margin-top:8px">Dooro habka lacag bixinta oo geli lambarka taleefanka</p>
+  <div class="pill-tabs" id="providerTabs" style="justify-content:center;margin-top:18px">
+    <button class="pill active" data-provider="waafipay">Zaad / EVC Plus</button>
+    <button class="pill" data-provider="edahab">eDahab</button>
+  </div>
+  <div class="field" style="margin-top:18px">
+    <input type="tel" id="payPhone" placeholder="e.g. 252638883301">
+  </div>
+  <button class="btn btn-gold btn-block" id="payNowBtn" style="margin-top:16px">Bixi Hadda <i class="fa-solid fa-mobile-screen-button"></i></button>
+  <button class="btn btn-ghost btn-block" id="paySkipBtn" style="margin-top:10px">Bixi goor dambe (Cash)</button>
+  <p id="payStatus" class="desc" style="margin-top:14px"></p>
+</div>
+
 <!-- order confirmation modal -->
 <div id="confirmOverlay" class="cart-overlay"></div>
 <div id="confirmModal" class="glass-card" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:4000;width:92%;max-width:420px;padding:40px;text-align:center">
@@ -77,58 +94,78 @@ const params = new URLSearchParams(location.search);
 const tableNum = params.get('table') || '—';
 document.getElementById('tableLabel').innerHTML = `<i class="fa-solid fa-chair"></i>&nbsp; Table ${tableNum}`;
 document.getElementById('tableNumInHead').textContent = tableNum;
-
-const db = HIIL.load();
-let activeCat='All', query='';
-const cats = ['All', ...new Set(db.menu.map(m=>m.cat))];
-document.getElementById('catTabs').innerHTML = cats.map(c=>`<button class="pill ${c==='All'?'active':''}" data-cat="${c}">${c}</button>`).join('');
 document.getElementById('takenFromInput').value = `Table ${tableNum}`;
 
-function render(){
-  let items = db.menu.filter(m=>{
-    const mc = activeCat==='All'||m.cat===activeCat;
+const API_BASE = '/api';
+let menu = [];
+let cart = [];
+let activeCat = 'All', query = '';
+let currentOrder = null;
+
+async function loadMenu(){
+  try {
+    const res = await fetch(API_BASE + '/menu');
+    menu = await res.json();
+  } catch (err) {
+    console.error('Menu load failed', err);
+    toast('Menu-ga lama soo geli karin', 'err');
+    menu = [];
+  }
+  const cats = ['All', ...new Set(menu.map(m => m.category))];
+  document.getElementById('catTabs').innerHTML = cats.map(c => `<button class="pill ${c==='All'?'active':''}" data-cat="${c}">${c}</button>`).join('');
+  renderMenu();
+}
+
+function renderMenu(){
+  let items = menu.filter(m => {
+    const mc = activeCat === 'All' || m.category === activeCat;
     const mq = m.name.toLowerCase().includes(query.toLowerCase());
     return mc && mq;
   });
-  document.getElementById('menuGrid').innerHTML = items.map(m=>`
+  document.getElementById('menuGrid').innerHTML = items.map(m => `
     <div class="food-card">
       <div class="img-wrap">
-        <img src="${m.img}" alt="${m.name}" loading="lazy">
+        <img src="${m.image_url}" alt="${m.name}" loading="lazy">
         <div class="badges">
-          ${m.popular?'<span class="badge badge-popular">Popular</span>':''}
-          ${!m.available?'<span class="badge badge-out">Out of Stock</span>':''}
+          ${m.is_popular ? '<span class="badge badge-popular">Popular</span>' : ''}
+          ${!m.is_available ? '<span class="badge badge-out">Out of Stock</span>' : ''}
         </div>
       </div>
       <div class="body">
         <div class="row-top"><h4>${m.name}</h4><span class="price">${fmtMoney(m.price)}</span></div>
-        <p class="desc">${m.desc}</p>
-        <button class="btn ${m.available?'btn-gold':'btn-ghost'} add-btn" data-id="${m.id}" ${m.available?'':'disabled'}>
-          ${m.available?'<i class="fa-solid fa-plus"></i> Add':'Unavailable'}
+        <p class="desc">${m.description || ''}</p>
+        <button class="btn ${m.is_available ? 'btn-gold' : 'btn-ghost'} add-btn" data-id="${m.id}" ${m.is_available ? '' : 'disabled'}>
+          ${m.is_available ? '<i class="fa-solid fa-plus"></i> Add' : 'Unavailable'}
         </button>
       </div>
     </div>
   `).join('');
 }
-render();
-document.getElementById('catTabs').addEventListener('click', e=>{
-  const b=e.target.closest('.pill'); if(!b) return;
-  activeCat=b.dataset.cat;
-  document.querySelectorAll('#catTabs .pill').forEach(p=>p.classList.remove('active')); b.classList.add('active');
-  render();
+
+document.getElementById('catTabs').addEventListener('click', e => {
+  const b = e.target.closest('.pill'); if (!b) return;
+  activeCat = b.dataset.cat;
+  document.querySelectorAll('#catTabs .pill').forEach(p => p.classList.remove('active'));
+  b.classList.add('active');
+  renderMenu();
 });
-document.getElementById('searchInput').addEventListener('input', e=>{ query=e.target.value; render(); });
-document.getElementById('menuGrid').addEventListener('click', e=>{
-  const btn = e.target.closest('.add-btn'); if(!btn||btn.disabled) return;
-  const item = db.menu.find(m=>m.id===btn.dataset.id);
-  HIIL.addToCart(item);
-  toast(item.name+' added');
+document.getElementById('searchInput').addEventListener('input', e => { query = e.target.value; renderMenu(); });
+document.getElementById('menuGrid').addEventListener('click', e => {
+  const btn = e.target.closest('.add-btn'); if (!btn || btn.disabled) return;
+  const item = menu.find(m => String(m.id) === btn.dataset.id);
+  const existing = cart.find(c => c.id === item.id);
+  if (existing) existing.qty += 1;
+  else cart.push({ id: item.id, name: item.name, price: Number(item.price), img: item.image_url, qty: 1 });
+  renderCart();
+  toast(item.name + ' added');
 });
 
+function cartTotal(){ return cart.reduce((s, c) => s + c.price * c.qty, 0); }
+
 function renderCart(){
-  const cart = HIIL.getCart();
-  document.getElementById('cartCount').textContent = cart.reduce((s,c)=>s+c.qty,0);
+  document.getElementById('cartCount').textContent = cart.reduce((s, c) => s + c.qty, 0);
   const wrap = document.getElementById('cartItems');
-  wrap.innerHTML = cart.length ? cart.map(c=>`
+  wrap.innerHTML = cart.length ? cart.map(c => `
     <div class="cart-item">
       <img src="${c.img}" alt="">
       <div style="flex:1">
@@ -136,54 +173,118 @@ function renderCart(){
         <div class="qty-ctrl"><button data-id="${c.id}" data-d="-1">−</button><span>${c.qty}</span><button data-id="${c.id}" data-d="1">+</button></div>
       </div>
     </div>`).join('') : '<div class="empty-state"><div class="icon"><i class="fa-solid fa-bag-shopping"></i></div><p>No items yet — add something delicious.</p></div>';
-  const sub = HIIL.cartTotal(), tax = sub*(db.settings.tax/100);
+  const sub = cartTotal(), tax = sub * ((HIIL.load().settings.tax || 5) / 100);
   document.getElementById('cartSubtotal').textContent = fmtMoney(sub);
   document.getElementById('cartTax').textContent = fmtMoney(tax);
-  document.getElementById('cartTotal').textContent = fmtMoney(sub+tax);
+  document.getElementById('cartTotal').textContent = fmtMoney(sub + tax);
 }
 renderCart();
-window.addEventListener('hiil-cart-updated', renderCart);
-document.getElementById('cartItems').addEventListener('click', e=>{
-  const b=e.target.closest('button[data-d]'); if(!b) return;
-  const cart=HIIL.getCart(); const it=cart.find(c=>c.id===b.dataset.id);
-  HIIL.updateCartQty(b.dataset.id, it.qty+parseInt(b.dataset.d));
+document.getElementById('cartItems').addEventListener('click', e => {
+  const b = e.target.closest('button[data-d]'); if (!b) return;
+  const it = cart.find(c => String(c.id) === b.dataset.id);
+  it.qty += parseInt(b.dataset.d);
+  if (it.qty <= 0) cart = cart.filter(c => c.id !== it.id);
+  renderCart();
 });
 
-const drawer2=document.getElementById('cartDrawer2'), overlay2=document.getElementById('cartOverlay2');
-document.getElementById('fabCart').addEventListener('click', ()=>{ drawer2.classList.add('open'); overlay2.classList.add('open'); });
-document.getElementById('closeCart').addEventListener('click', ()=>{ drawer2.classList.remove('open'); overlay2.classList.remove('open'); });
-overlay2.addEventListener('click', ()=>{ drawer2.classList.remove('open'); overlay2.classList.remove('open'); });
+const drawer2 = document.getElementById('cartDrawer2'), overlay2 = document.getElementById('cartOverlay2');
+document.getElementById('fabCart').addEventListener('click', () => { drawer2.classList.add('open'); overlay2.classList.add('open'); });
+document.getElementById('closeCart').addEventListener('click', () => { drawer2.classList.remove('open'); overlay2.classList.remove('open'); });
+overlay2.addEventListener('click', () => { drawer2.classList.remove('open'); overlay2.classList.remove('open'); });
 
-document.getElementById('placeOrderBtn').addEventListener('click', ()=>{
-  const cart = HIIL.getCart();
-  if(!cart.length){ toast('Your cart is empty', 'err'); return; }
-  const liveDb = HIIL.load();
+/* ---------------- Place order -> backend ---------------- */
+document.getElementById('placeOrderBtn').addEventListener('click', async () => {
+  if (!cart.length) { toast('Your cart is empty', 'err'); return; }
   const takenFrom = document.getElementById('takenFromInput').value.trim() || `Table ${tableNum}`;
   const billTo = document.getElementById('billToInput').value.trim() || 'Walk-in guest';
-  const orderNo = 'HC-' + (liveDb.nextOrderNo++);
-  const order = {
-    id: 'o_'+Date.now(), no: orderNo, table: tableNum,
-    takenFrom,
-    chargedTo: billTo,
-    items: cart.map(c=>({ id:c.id, name:c.name, qty:c.qty, price:c.price })),
-    total: cart.reduce((s,c)=>s+c.price*c.qty,0),
-    status: 'New', createdAt: Date.now()
-  };
-  liveDb.orders.unshift(order);
-  HIIL.save(liveDb);
-  HIIL.notifyManager('New order received', `Table ${tableNum} placed order ${orderNo} for ${cart.length} item(s) with total ${fmtMoney(order.total)}. Taken from ${takenFrom}; billed to ${billTo}.`);
-  HIIL.clearCart();
-  document.getElementById('confOrderNo').textContent = orderNo;
-  document.getElementById('confTakenFrom').textContent = takenFrom;
-  document.getElementById('confBillTo').textContent = billTo;
+
+  try {
+    const res = await fetch(API_BASE + '/orders', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        table_number: tableNum,
+        items: cart.map(c => ({ menu_item_id: c.id, quantity: c.qty }))
+      })
+    });
+    if (!res.ok) throw new Error('Order failed');
+    const data = await res.json();
+
+    currentOrder = { id: data.id, no: data.order_no, total: data.total, takenFrom, billTo };
+    cart = [];
+    renderCart();
+    drawer2.classList.remove('open'); overlay2.classList.remove('open');
+
+    document.getElementById('payOrderNo').textContent = currentOrder.no;
+    document.getElementById('payOrderTotal').textContent = fmtMoney(currentOrder.total);
+    document.getElementById('payStatus').textContent = '';
+    document.getElementById('payOverlay').classList.add('open');
+    document.getElementById('payModal').style.display = 'block';
+  } catch (err) {
+    console.error(err);
+    toast('Dalabka lama diri karin, isku day mar kale', 'err');
+  }
+});
+
+/* ---------------- Payment modal ---------------- */
+let activeProvider = 'waafipay';
+document.getElementById('providerTabs').addEventListener('click', e => {
+  const b = e.target.closest('.pill'); if (!b) return;
+  activeProvider = b.dataset.provider;
+  document.querySelectorAll('#providerTabs .pill').forEach(p => p.classList.remove('active'));
+  b.classList.add('active');
+});
+
+document.getElementById('payNowBtn').addEventListener('click', async () => {
+  const phone = document.getElementById('payPhone').value.trim();
+  if (!phone) { toast('Fadlan geli lambarka taleefanka', 'err'); return; }
+  const statusEl = document.getElementById('payStatus');
+  statusEl.textContent = 'Lacagta ayaa la socodsiinayaa...';
+
+  try {
+    const res = await fetch(`${API_BASE}/payments/${activeProvider}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone, orderId: currentOrder.id })
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      statusEl.textContent = 'Lacag bixinta way guulaysatay!';
+      setTimeout(showConfirmation, 900);
+    } else {
+      statusEl.textContent = 'Lacag bixinta way fashilantay: ' + (data.message || data.error || 'Fadlan isku day mar kale');
+    }
+  } catch (err) {
+    console.error(err);
+    statusEl.textContent = 'Khalad ayaa dhacay, fadlan isku day mar kale';
+  }
+});
+
+document.getElementById('paySkipBtn').addEventListener('click', () => {
+  showConfirmation();
+});
+
+function showConfirmation(){
+  document.getElementById('payOverlay').classList.remove('open');
+  document.getElementById('payModal').style.display = 'none';
+
+  document.getElementById('confOrderNo').textContent = currentOrder.no;
+  document.getElementById('confTakenFrom').textContent = currentOrder.takenFrom;
+  document.getElementById('confBillTo').textContent = currentOrder.billTo;
   document.getElementById('confirmOverlay').classList.add('open');
   document.getElementById('confirmModal').style.display = 'block';
-  drawer2.classList.remove('open'); overlay2.classList.remove('open');
-});
-document.getElementById('closeConfirm').addEventListener('click', ()=>{
+}
+
+document.getElementById('closeConfirm').addEventListener('click', () => {
   document.getElementById('confirmOverlay').classList.remove('open');
   document.getElementById('confirmModal').style.display = 'none';
+  document.getElementById('takenFromInput').value = `Table ${tableNum}`;
+  document.getElementById('billToInput').value = '';
+  currentOrder = null;
 });
+
+loadMenu();
 </script>
 </body>
 </html>
