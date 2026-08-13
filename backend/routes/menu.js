@@ -9,7 +9,10 @@ router.get('/', async (req, res) => {
       ? await pool.query('SELECT * FROM menu_items WHERE category = ? ORDER BY created_at DESC', [category])
       : await pool.query('SELECT * FROM menu_items ORDER BY created_at DESC');
     res.json(rows);
-  } catch (err) { res.status(500).json({ error: err.message }); }
+  } catch (err) {
+    console.error('GET /api/menu error:', err);
+    res.status(500).json({ error: err.message || String(err) });
+  }
 });
 
 // POST /api/menu — add a dish
@@ -22,7 +25,10 @@ router.post('/', async (req, res) => {
       [name, category, description || '', price, image_url || '']
     );
     res.status(201).json({ id: result.insertId });
-  } catch (err) { res.status(500).json({ error: err.message }); }
+  } catch (err) {
+    console.error('POST /api/menu error:', err);
+    res.status(500).json({ error: err.message || String(err) });
+  }
 });
 
 // PATCH /api/menu/:id — update availability, price, etc.
@@ -35,7 +41,10 @@ router.patch('/:id', async (req, res) => {
     values.push(req.params.id);
     await pool.query(`UPDATE menu_items SET ${updates.join(', ')} WHERE id = ?`, values);
     res.json({ success: true });
-  } catch (err) { res.status(500).json({ error: err.message }); }
+  } catch (err) {
+    console.error('PATCH /api/menu error:', err);
+    res.status(500).json({ error: err.message || String(err) });
+  }
 });
 
 // DELETE /api/menu/:id
@@ -43,7 +52,10 @@ router.delete('/:id', async (req, res) => {
   try {
     await pool.query('DELETE FROM menu_items WHERE id = ?', [req.params.id]);
     res.json({ success: true });
-  } catch (err) { res.status(500).json({ error: err.message }); }
+  } catch (err) {
+    console.error('DELETE /api/menu error:', err);
+    res.status(500).json({ error: err.message || String(err) });
+  }
 });
 
 module.exports = router;
