@@ -3,13 +3,6 @@ const crypto = require('crypto');
 const pool = require('../db/pool');
 const router = express.Router();
 
-/* ============================================================
-   WaafiPay — taageera ZAAD iyo EVC Plus labadaba isku endpoint ah
-   (iyo SAHAL). paymentMethod: MWALLET_ACCOUNT wuxuu automatic u
-   kala saaraa taleefanka wallet-kiisa (Zaad ama EVC).
-   Docs: https://docs.waafipay.com/purchase-api
-   ============================================================ */
-
 const WAAFI_BASE = process.env.WAAFI_ENV === 'production'
   ? 'https://api.waafipay.net/asm'
   : 'https://sandbox.waafipay.com/asm';
@@ -57,12 +50,22 @@ router.post('/waafipay', async (req, res) => {
       }
     };
 
+    console.log('WaafiPay request env check:', {
+      envMode: process.env.WAAFI_ENV,
+      base: WAAFI_BASE,
+      merchantUidSet: !!process.env.WAAFI_MERCHANT_UID,
+      apiUserIdSet: !!process.env.WAAFI_API_USER_ID,
+      apiKeySet: !!process.env.WAAFI_API_KEY
+    });
+
     const response = await fetch(WAAFI_BASE, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
     const data = await response.json();
+
+    console.log('WaafiPay full response:', JSON.stringify(data));
 
     const success = data.responseCode === '2001' && data.params?.state === 'APPROVED';
     const newStatus = success ? 'success' : 'failed';
@@ -89,12 +92,6 @@ router.post('/waafipay', async (req, res) => {
     conn.release();
   }
 });
-
-/* ============================================================
-   eDahab
-   Docs: https://docs.edahab.net/purchase
-   Hash = SHA256(JSON body + API Secret) hex
-   ============================================================ */
 
 const EDAHAB_BASE = 'https://edahab.net/api/api/';
 
@@ -139,6 +136,8 @@ router.post('/edahab', async (req, res) => {
       body: JSON.stringify(body)
     });
     const data = await response.json();
+
+    console.log('eDahab full response:', JSON.stringify(data));
 
     const success = data.StatusCode === 0 && data.InvoiceStatus === 'Paid';
     const newStatus = success ? 'success' : 'failed';
