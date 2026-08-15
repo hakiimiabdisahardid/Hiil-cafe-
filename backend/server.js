@@ -13,6 +13,7 @@ const employeesRouter = require('./routes/employees');
 const discountsRouter = require('./routes/discounts');
 const reportsRouter = require('./routes/reports');
 const notificationsRouter = require('./routes/notifications');
+const paymentsRouter = require('./routes/payments');
 
 const app = express();
 app.use(cors());
@@ -30,6 +31,7 @@ app.use('/api/employees', employeesRouter);
 app.use('/api/discounts', discountsRouter);
 app.use('/api/reports', reportsRouter);
 app.use('/api/notifications', notificationsRouter);
+app.use('/api/payments', paymentsRouter);
 
 app.use(express.static(path.join(__dirname, './frontend')));
 
