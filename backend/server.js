@@ -14,6 +14,7 @@ const discountsRouter = require('./routes/discounts');
 const reportsRouter = require('./routes/reports');
 const notificationsRouter = require('./routes/notifications');
 const paymentsRouter = require('./routes/payments');
+const tablesRouter = require('./routes/tables');
 
 const app = express();
 app.use(cors());
@@ -32,6 +33,7 @@ app.use('/api/discounts', discountsRouter);
 app.use('/api/reports', reportsRouter);
 app.use('/api/notifications', notificationsRouter);
 app.use('/api/payments', paymentsRouter);
+app.use('/api/tables', tablesRouter);
 
 app.use(express.static(path.join(__dirname, './frontend')));
 
